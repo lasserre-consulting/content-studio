@@ -1,0 +1,74 @@
+[
+ {
+  "name": "bg_alexandria_burning_sky",
+  "out_path": "backgrounds/act1_alexandria/bg_alexandria_burning_sky.png",
+  "subject": "burning apocalyptic sky over a medieval city, vertical gradient fiery orange #FF6B35 at bottom blending through warm brown into near-black charcoal #1A1A1A at top, three thick wavy black smoke plumes drifting diagonally right, ash haze, ember glow, dark fantasy game background art, painterly matte sky, FF9 Moguri aesthetic, dramatic firelit dusk, wide cinematic panorama",
+  "negative_prompt": "characters, people, buildings, text, watermark, transparent, checkerboard, photorealistic, blurry, sun, stars, clean blue sky",
+  "width": 1280,
+  "height": 256,
+  "detour": false
+ },
+ {
+  "name": "bg_alexandria_burning_fires",
+  "out_path": "backgrounds/act1_alexandria/bg_alexandria_burning_fires.png",
+  "subject": "six separate stylized flame clusters isolated on a flat neutral gray background, fiery orange #FF6B35 alternating golden yellow #E8C547 tongues, two tall large flames two medium two small darker flames, flickering pixel-art flame tongues with rising sparks, no scenery, dark fantasy game fire overlay, painterly hand-drawn flames, FF9 Moguri aesthetic, clean isolated subject for cutout",
+  "negative_prompt": "buildings, sky, ground, characters, people, text, watermark, full scene, busy background, photorealistic, blurry, blue flames, torch handle",
+  "width": 1280,
+  "height": 512,
+  "detour": true
+ },
+ {
+  "name": "bg_alexandria_ruins_overlay",
+  "out_path": "backgrounds/act1_alexandria/bg_alexandria_ruins_overlay.png",
+  "subject": "four collapsed ruined building facades as dark slate-gray silhouettes #2D3748, broken jagged walls with crumbled tops, scattered rubble at bases, isolated on a flat neutral gray background, medieval stone residential ruins, no sky no ground, dark fantasy ruins overlay, painterly silhouettes, FF9 Moguri aesthetic, clean isolated subject for cutout",
+  "negative_prompt": "intact buildings, sky, fire, characters, people, text, bright colors, full landscape, photorealistic, blurry, trees, grass",
+  "width": 1280,
+  "height": 960,
+  "detour": true
+ },
+ {
+  "name": "bg_alexandria_fissure_crack",
+  "out_path": "backgrounds/act1_alexandria/bg_alexandria_fissure_crack.png",
+  "subject": "a vertical jagged glowing energy fracture splitting the frame, lightning-bolt-like crack, deep violet #2D0A47 luminous interior with bright glowing edges, abstract dimensional rift, isolated on flat neutral gray background, dark fantasy, painterly glowing crack, FF9 Moguri aesthetic, clean isolated subject for cutout",
+  "negative_prompt": "face, person, portrait, woman, veil, eyes, crying, tears, human, figure, statue, sky, buildings, text, full scene, blue glow, orange glow, photorealistic, blurry, frame",
+  "width": 640,
+  "height": 960,
+  "detour": true
+ },
+ {
+  "name": "bg_treno_barricades",
+  "out_path": "backgrounds/act2_treno_ipsens/bg_treno_barricades.png",
+  "subject": "low makeshift barricade of overturned wooden tables stacked barrels planks and wood debris, dark stained wood with metal banding, waist-height defensive blockade, gothic Treno furniture style, isolated on a flat neutral gray background, no wall no ground, dark fantasy game prop overlay, painterly props, FF9 Moguri aesthetic, muted somber tones, clean isolated subject for cutout",
+  "negative_prompt": "buildings, sky, characters, people, text, full scene, bright colors, modern objects, sandbags, stone wall, photorealistic, blurry, frame",
+  "width": 1280,
+  "height": 512,
+  "detour": true
+ },
+ {
+  "name": "bg_ipsens_maps_overlay",
+  "out_path": "backgrounds/act2_treno_ipsens/bg_ipsens_maps_overlay.png",
+  "subject": "three hand-drawn war maps of a fantasy world on yellowed aged paper, sketchy brown ink lines, red enemy position crosses, blue retreat arrows, one large one medium crumpled one small note, illegible scribbled text, pinned curling parchment, isolated on a flat neutral gray background, dark fantasy hand-drawn cartography overlay, painterly aged sketch style, FF9 Moguri aesthetic, clean isolated subject for cutout",
+  "negative_prompt": "walls, room, characters, people, readable text, modern map, glossy paper, full scene, photorealistic, blurry, white background filling frame, frame, satellite",
+  "width": 1280,
+  "height": 960,
+  "detour": true
+ },
+ {
+  "name": "bg_crystal_world_corruption_split",
+  "out_path": "backgrounds/act3_crystal_memoria_threshold/bg_crystal_world_corruption_split.png",
+  "subject": "split crystal cavern landscape, left half healthy luminous blue crystals #0F3460 pristine glowing, right half corrupted dark violet #2D0A47 crystals cracked and dimmed, an irregular organic serpentine vertical seam dividing them like a tear, abrupt no-gradient transition, dark fantasy crystal world, painterly glowing crystals, FF9 Moguri aesthetic, full atmospheric scene, eerie contrast pure versus tainted",
+  "negative_prompt": "straight dividing line, characters, people, text, sky, buildings, transparent, checkerboard, photorealistic, blurry, green crystals, red crystals, frame",
+  "width": 1280,
+  "height": 960,
+  "detour": false
+ },
+ {
+  "name": "bg_threshold_platform",
+  "out_path": "backgrounds/act3_crystal_memoria_threshold/bg_threshold_platform.png",
+  "subject": "a flat circular stone disc arena floor seen from a high top-down angle, deep blue crystalline floor tiles #0F3460 with faint hexagonal pattern, glowing soul-light rim #E0E7FF, surrounded by pure black void #000000, flat ground platform not a ball, dark fantasy final arena floor, painterly, FF9 Moguri aesthetic, solemn ethereal emptiness",
+  "negative_prompt": "sphere, ball, orb, globe, 3d ball, round object, planet, marble, characters, people, text, sky, stars, walls, square, transparent, checkerboard, photorealistic, blurry, frame",
+  "width": 1280,
+  "height": 960,
+  "detour": false
+ }
+]

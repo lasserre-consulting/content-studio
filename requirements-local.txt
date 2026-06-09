@@ -1,0 +1,40 @@
+# Dépendances des providers LOCAUX (GPU). Lourd : ~5-8 Go de téléchargement.
+#
+# IMPORTANT (RTX 2080 SUPER / CUDA) : installe torch AVANT le reste, avec la
+# bonne roue CUDA, sinon pip prend la version CPU. Roue validée (cu124) :
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124
+#
+# Puis :
+#   pip install -r requirements-local.txt
+
+torch>=2.2              # (préinstaller via l'index CUDA, cf. ci-dessus)
+torchaudio
+torchvision             # silence le fallback PIL des processors + accélère
+
+# Image
+diffusers>=0.27
+transformers>=4.40
+accelerate>=0.29
+safetensors
+
+# Musique / SFX (MusicGen, AudioGen) — RECETTE VALIDÉE torch 2.6 (2026-06-05).
+# audiocraft 1.3 épingle torch==2.1/xformers<0.0.23/av==11 → NE PAS l'installer en
+# ligne directe (pip downgrade torch et casse SDXL). Procédure manuelle :
+#   pip install audiocraft --no-deps
+#   pip install omegaconf hydra-core hydra_colorlog julius num2words sentencepiece \
+#               encodec einops dora-search flashy librosa torchmetrics av
+#   pip install xformers==0.0.29.post3   # seul ABI-compatible torch 2.6 (backend attn = torch)
+#   pip install scikit-learn==1.5.2      # la DLL de sklearn >=1.9 est bloquée par Smart App Control (Windows)
+# Vérifier la stack : python -m studio.doctor
+# Alternatives à poids ouverts si besoin : Stable Audio Open, ACE-Step.
+
+# Voix
+kokoro>=0.3            # TTS léger, tourne même sur CPU
+soundfile
+
+# Détourage local (fond transparent des sprites) — remplace remove.bg
+rembg>=2.0.76
+onnxruntime           # backend CPU ; onnxruntime-gpu pour accélérer si voulu
+
+# Optimisation mémoire VRAM (utile sur 8 Go) — version épinglée pour torch 2.6 :
+# xformers==0.0.29.post3   (cf. recette audiocraft ci-dessus ; requis aussi par audiocraft à l'import)

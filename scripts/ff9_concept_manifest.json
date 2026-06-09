@@ -1,0 +1,34 @@
+[
+  {
+    "name": "deathguise_scout_concept",
+    "out_path": "deathguise_scout_concept.png",
+    "subject": "concept art of a floating winged demonic entity, matte pitch-black body #0A0A0A, gaunt clawed gargoyle-like silhouette, huge outstretched bat wings with translucent dark-violet membranes #2D0A47 threaded by fine black veins, two large round mirror-like reflective eyes #C8C8C8 with no pupils, cold blank stare, hovering above ground, faint desaturation aura draining color around it, dark cosmic fantasy, eerie clinical observer, FF9 boss design, dramatic rim light, void background, highly detailed character concept illustration",
+    "negative_prompt": "character sheet, multiple views, turnaround, text, watermark, signature, logo, blurry, low detail, deformed, extra limbs, bright colors, saturated, warm tones, cute, friendly, pupils, glowing red eyes, fire, cartoon, flat lighting, busy background",
+    "width": 832,
+    "height": 1216
+  },
+  {
+    "name": "nova_dragon_crystal_concept",
+    "out_path": "nova_dragon_crystal_concept.png",
+    "subject": "concept art of a colossal dragon, scales replaced by jet-black geometric hexagonal crystal armor #1A1A2E, glowing crystalline edges #0F3460 cold blue, faceted angular plating across body wings and tail, massive winged dragon silhouette, jaws open exhaling pure non-elemental beam #2D0A47 deep violet smooth no fire no ice, desaturated grey colorless environment around it, drained washed-out background, dark cosmic fantasy, dramatic rim light, FF9 boss design, painterly key art, full body, intricate detail",
+    "negative_prompt": "character sheet, multiple views, turnaround, text, watermark, signature, blurry, lowres, organic scales, fur, fire breath, flames, ice, warm colors, saturated background, cartoon, cute, deformed anatomy, extra limbs",
+    "width": 1216,
+    "height": 832
+  },
+  {
+    "name": "necron_awakened_concept",
+    "out_path": "necron_awakened_concept.png",
+    "subject": "concept art of a massive cosmic humanoid entity, towering abstract godlike being, glowing solid violet eyes #2D0A47, dense opaque body not translucent, smooth empty crownless head with bare hollow void where a crown was removed, dark cosmic dark fantasy, deep purple #2D0A47 signature palette, cold blue accents, funereal grandeur, ornate symmetrical anatomy, ethereal floating boss, FF9 final fantasy boss art style, painterly, dramatic rim light, black void background, full body, highly detailed, key visual reference illustration",
+    "negative_prompt": "character sheet, multiple views, spritesheet, turnaround, text, logo, watermark, signature, blurry, lowres, crown, tiara, halo, headdress, red eyes, transparent body, ghostly translucent, glassy, warm orange lighting, cute, chibi, cropped head, extra limbs, deformed",
+    "width": 832,
+    "height": 1216
+  },
+  {
+    "name": "kuja_imitation_concept",
+    "out_path": "kuja_imitation_concept.png",
+    "subject": "concept art of androgynous elegant sorcerer, long flowing silver-white hair, ornate purple and silver feathered outfit, slender graceful figure, full body, faint glistening tears on cheeks, blank empty hollow expression, vacant absent eyes, subtle desaturated muted colors, very faint dark violet glow halo around body, dark fantasy, JRPG boss villain, painterly Final Fantasy IX style, dramatic rim lighting, dark abyssal crystal background, eerie uncanny unsettling atmosphere, highly detailed character illustration",
+    "negative_prompt": "character sheet, multiple views, turnaround, spritesheet, text, watermark, signature, logo, blurry, lowres, deformed, extra limbs, bad anatomy, smiling, happy expression, vibrant saturated colors, cheerful, cartoon, chibi, nude, weapon, duplicate face",
+    "width": 832,
+    "height": 1216
+  }
+]

@@ -1,0 +1,76 @@
+# ============================================================================
+#  CONFIGURATION CENTRALE DU STUDIO
+#  Pour changer de modèle/IA : modifie 'active' (et 'fallback' si besoin).
+#  C'est le SEUL fichier à toucher pour basculer un provider.
+# ============================================================================
+
+defaults:
+  # Préférence globale quand plusieurs providers conviennent.
+  prefer: local            # local | cloud
+  output_dir: outputs      # où sont écrits les fichiers générés
+
+# --- TEXTE / LLM (amélioration de prompt, orchestration, idées) -------------
+llm:
+  active: anthropic
+  fallback: [ollama]       # bascule vers le LLM local si pas de clé API
+  providers:
+    anthropic:
+      model: claude-sonnet-4-6
+      max_tokens: 2048
+    openai:
+      model: gpt-4o
+    ollama:
+      model: llama3.1
+      host: http://localhost:11434
+
+# --- IMAGE ------------------------------------------------------------------
+image:
+  active: sdxl-local       # tient sur 8 Go de VRAM
+  fallback: [fal-image]    # qualité supérieure / Flux via le cloud
+  providers:
+    sdxl-local:
+      model: stabilityai/stable-diffusion-xl-base-1.0
+      steps: 20                      # scheduler DPM++ Karras : 20 suffisent
+      width: 1024
+      height: 1024
+      guidance_scale: 7.5
+      negative_prompt: "blurry, low quality, deformed, bad anatomy, text, watermark, signature"
+    fal-image:
+      model: fal-ai/flux/dev
+
+# --- VIDÉO (trop lourd en local sur 8 Go → cloud par défaut) ----------------
+video:
+  active: fal-video
+  fallback: []
+  providers:
+    fal-video:
+      model: fal-ai/kling-video/v1/standard/text-to-video
+    ltx-local:               # expérimental : le plus léger des modèles vidéo
+      model: Lightricks/LTX-Video
+
+# --- MUSIQUE ----------------------------------------------------------------
+music:
+  active: musicgen-local
+  fallback: []
+  providers:
+    musicgen-local:
+      model: facebook/musicgen-medium
+      duration: 15
+
+# --- EFFETS SONORES ---------------------------------------------------------
+sfx:
+  active: audiogen-local
+  fallback: []
+  providers:
+    audiogen-local:
+      model: facebook/audiogen-medium
+      duration: 5
+
+# --- VOIX / TTS -------------------------------------------------------------
+tts:
+  active: kokoro-local       # minuscule, rapide, tourne même sans GPU
+  fallback: []
+  providers:
+    kokoro-local:
+      voice: ff_siwis         # voix française ; pour l'anglais : af_heart + lang a
+      lang: f                 # 'f' = français, 'a' = anglais US

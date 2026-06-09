@@ -1,0 +1,20 @@
+[
+ {
+  "out_path": "assets/sprites/characters/fantome_melancolique/angry.png",
+  "kind": "character",
+  "width": 832,
+  "height": 1216,
+  "detour": true,
+  "seed": 4242,
+  "subject": "A melancholic ghost spirit, FULL BODY from head down to trailing wisps, same translucent pale blue and silver spectral form as the calm idle pose, wispy vaporous flowing robes, ABSOLUTELY NO WINGS, ornate silver chains and small mourning tokens. Furious anguished expression, glowing crimson eyes, face twisted in grief and rage, both arms tensed and raised in a threatening grasping gesture at waist level, robe billowing with fury, faint crackling violet-red spectral energy. Identical silhouette, costume and proportions to the idle state, only the emotion and pose change."
+ },
+ {
+  "out_path": "assets/sprites/characters/elfe_noir/angry.png",
+  "kind": "character",
+  "width": 832,
+  "height": 1216,
+  "detour": true,
+  "seed": 7777,
+  "subject": "A dark elf warrior woman, FULL BODY from head to feet (NOT a close-up, NOT a bust), wearing the exact same ornate dark armor with gold trim and flowing dark robes as the idle pose, long silver-white hair, pointed ears with gold jewelry, sharp pale features. Cold furious expression, glowing pale-blue eyes, furrowed brow, one hand raised conjuring crackling blue arcane energy, aggressive commanding full-body stance. Same costume, hair, silhouette and proportions as the idle and happy states, full-body framing."
+ }
+]

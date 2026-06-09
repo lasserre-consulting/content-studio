@@ -1,0 +1,11 @@
+[project]
+name = "content-studio"
+version = "0.1.0"
+description = "Studio unifié de génération IA : image, vidéo, musique, SFX, voix, texte — local + cloud"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+include = ["studio*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

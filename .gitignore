@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+outputs/*
+!outputs/.gitkeep
+*.png
+*.wav
+*.mp4
+*.ogg
+.pytest_cache/
+models/
+*.safetensors
+*.ckpt

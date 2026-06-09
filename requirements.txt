@@ -1,0 +1,18 @@
+# --- Cœur (léger, toujours nécessaire) -------------------------------------
+pyyaml>=6.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+Pillow>=10.0           # manipulation d'images (assemblage, vignettes, sprites)
+# NB: le montage vidéo des studios requiert ffmpeg (binaire système,
+#     winget install Gyan.FFmpeg), pas un paquet pip.
+
+# --- Providers cloud (optionnel, légers) ------------------------------------
+anthropic>=0.40        # LLM Claude
+openai>=1.30           # LLM GPT (optionnel)
+fal-client>=0.4        # agrégateur image/vidéo cloud
+requests>=2.31
+
+# --- Providers LOCAUX (lourds — voir requirements-local.txt) ----------------
+# Installés séparément car ils tirent torch + CUDA (~plusieurs Go).
+# pip install -r requirements-local.txt

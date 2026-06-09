@@ -1,0 +1,12 @@
+[
+ {
+  "out_path": "assets/sprites/characters/elfe_noir/angry.png",
+  "kind": "character",
+  "width": 832,
+  "height": 1216,
+  "detour": true,
+  "seed": 5150,
+  "negative_prompt": "character sheet, reference sheet, turnaround, multiple views, multiple poses, multiple characters, collage, grid, thumbnails, duplicate, blurry, low quality, text, watermark",
+  "subject": "A single dark elf warrior woman standing alone, ONE figure only, full body from head to feet, dark ashen skin, long silver-white hair, pointed ears with gold jewelry, wearing ornate black and gold plate armor with flowing dark cape matching the idle pose, holding a glowing sword. Cold furious angry expression, glowing pale-blue eyes, furrowed brow, aggressive battle stance. Centered single character portrait."
+ }
+]

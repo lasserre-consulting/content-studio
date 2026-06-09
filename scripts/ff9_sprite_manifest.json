@@ -1,0 +1,80 @@
+{
+  "deathguise_scout": {
+    "out_subdir": "enemies/deathguise_scout",
+    "gen_size": [832, 1216],
+    "style_prefix": "dark fantasy game battle sprite, floating winged demon, matte pure-black body, large violet membrane wings with black veins, round mirror eyes no pupils, cold clinical, centered full-body, plain dark grey background, clean silhouette for cutout,",
+    "negative_prompt": "character sheet, multiple views, multiple characters, turnaround, text, words, logo, watermark, signature, frame, border, ground, floor, cast shadow, scenery, blurry, low detail, jpeg artifacts, cropped, cute, colorful background, human face",
+    "seed": 47213,
+    "states": {
+      "idle": "at rest, hovering, wings fully spread symmetrically, body slightly forward, three-quarter view, calm motionless, veins dark violet",
+      "scan": "analysis posture, head tilted forward, mirror eyes emitting soft radial white glow, wing veins pulsing toward bright white, alert scanning stance",
+      "attack": "aggressive lunge, wings sweeping forward, partial chromatic inversion of body and wings, energy retracting inward, claws extended",
+      "death": "silent disintegration, body fragmenting into drifting violet particles pulled toward center, wings dissolving, fading to emptiness, no explosion",
+      "portrait": "bust shot, three-quarter view, upper body and head, wing tips visible, mirror eyes facing viewer, clinical cold expression"
+    },
+    "sheets": [
+      {"file": "deathguise_scout_idle_sheet.png", "state": "idle", "w": 512, "h": 256, "cols": 4, "rows": 1},
+      {"file": "deathguise_scout_scan_sheet.png", "state": "scan", "w": 512, "h": 256, "cols": 4, "rows": 1},
+      {"file": "deathguise_scout_attack_sheet.png", "state": "attack", "w": 512, "h": 256, "cols": 4, "rows": 1},
+      {"file": "deathguise_scout_death_sheet.png", "state": "death", "w": 256, "h": 256, "cols": 1, "rows": 1},
+      {"file": "deathguise_scout_portrait_ui.png", "state": "portrait", "w": 128, "h": 128, "cols": 1, "rows": 1}
+    ]
+  },
+  "nova_dragon_crystal": {
+    "out_subdir": "enemies/nova_dragon_crystal",
+    "gen_size": [1216, 832],
+    "style_prefix": "Final Fantasy IX boss sprite, colossal black dragon clad in geometric hexagonal crystal armor, scales as faceted obsidian dark navy with glowing cold blue edges, dark neutral void background, centered full-body, painterly 2D RPG render,",
+    "negative_prompt": "character sheet, multiple views, turnaround, text, watermark, signature, blurry, fire, flames, embers, ice, frost, snow, organic scales, fur, feathers, scenery, ground, floor, props, cropped, low detail, photorealistic, human",
+    "seed": 50117,
+    "states": {
+      "idle": "massive dragon at rest, head raised, wings folded against the body, hexagonal crystal armor plating catching faint blue edge-light, still and imposing",
+      "attack": "jaws wide open exhaling a pure violet non-elemental beam, smooth textureless ray, head thrust forward, wings spread wide, menacing",
+      "death": "entire body fully crystallized into solid blue crystal, silently fracturing apart, glassy shards breaking off and fading, no flames no smoke",
+      "portrait": "side profile head close-up, hexagonal black crystal armor on the skull and jaw, glowing blue edges, cold lifeless gaze"
+    },
+    "sheets": [
+      {"file": "nova_dragon_crystal_idle_sheet.png", "state": "idle", "w": 768, "h": 384, "cols": 4, "rows": 1},
+      {"file": "nova_dragon_crystal_attack_sheet.png", "state": "attack", "w": 768, "h": 512, "cols": 3, "rows": 1},
+      {"file": "nova_dragon_crystal_death_sheet.png", "state": "death", "w": 768, "h": 384, "cols": 4, "rows": 1},
+      {"file": "nova_dragon_portrait_ui.png", "state": "portrait", "w": 192, "h": 192, "cols": 1, "rows": 1}
+    ]
+  },
+  "kuja_imitation": {
+    "out_subdir": "enemies/kuja_imitation",
+    "gen_size": [832, 1216],
+    "style_prefix": "FF9 battle sprite, Trance Kuja imitation, long silver-white hair, ornate plumed purple silver outfit, androgynous elegant, faint violet halo, subtle tears, desaturated, empty hollow gaze, full body centered, plain dark neutral background,",
+    "negative_prompt": "character sheet, multiple views, multiple characters, text, watermark, signature, logo, blurry, lowres, cropped, smiling, happy, expressive, vibrant saturated colors, bright background, scenery, props, weapon, extra limbs, deformed hands, cluttered",
+    "seed": 24793,
+    "states": {
+      "idle": "standing upright, elegant but frozen rigid posture, arms still at sides, blank vacant stare into distance",
+      "attack": "casting gesture, one arm raised flinging a spell, faint violet halo glowing around the spell effect, vacant expression",
+      "death": "kneeling on the ground, arms hanging limp at sides, head tilted up gazing at the sky, body dissolving into white fade, serene empty face",
+      "portrait": "bust shot from chest up, facing forward, heavily desaturated, absent emotionless expression, faint silver tear streak"
+    },
+    "sheets": [
+      {"file": "kuja_imitation_idle_sheet.png", "state": "idle", "w": 512, "h": 256, "cols": 4, "rows": 1},
+      {"file": "kuja_imitation_attack_sheet.png", "state": "attack", "w": 512, "h": 256, "cols": 4, "rows": 1},
+      {"file": "kuja_imitation_death_sheet.png", "state": "death", "w": 512, "h": 512, "cols": 2, "rows": 2},
+      {"file": "kuja_imitation_portrait_ui.png", "state": "portrait", "w": 128, "h": 128, "cols": 1, "rows": 1}
+    ]
+  },
+  "necron_awakened": {
+    "out_subdir": "enemies/necron_awakened",
+    "gen_size": [832, 1216],
+    "style_prefix": "FF9 boss battle sprite, colossal cosmic humanoid entity, no crown bare empty hollow above head, dense opaque solid body not translucent, deep violet glowing eyes, cold blue rim light accents, funereal grandeur, dark void palette, isolated centered full-frame, plain dark neutral background,",
+    "negative_prompt": "character sheet, multiple views, multiple characters, text, watermark, signature, logo, blurry, lowres, jpeg artifacts, crown, tiara, halo, headdress, red eyes, glowing red, translucent, transparent, ghostly, see-through, gradient background, scenery, cropped, cute, colorful, warm colors",
+    "seed": 50347,
+    "states": {
+      "idle": "front view, massive entity standing, symmetrical arms lowered at sides, bare hollow crownless head, still solemn pose",
+      "precursor": "front view, one arm extended forward, thin sharp violet laser beam from fingertip marking a target, faint violet eye-glyph forming",
+      "void": "front view, both hands raised forward cupping an expanding sphere of absolute void, pure black orb growing from palms, light swallowed inward",
+      "death": "front view, eyes dimming to dark, glowing lights fading out, body solidifying toward pure black, dissolving into nothing, silent extinction"
+    },
+    "sheets": [
+      {"file": "necron_awakened_idle_sheet.png", "state": "idle", "w": 1024, "h": 512, "cols": 2, "rows": 1},
+      {"file": "necron_awakened_precursor_sheet.png", "state": "precursor", "w": 1024, "h": 512, "cols": 2, "rows": 1},
+      {"file": "necron_awakened_void_sheet.png", "state": "void", "w": 1024, "h": 512, "cols": 2, "rows": 1},
+      {"file": "necron_awakened_death_sheet.png", "state": "death", "w": 1024, "h": 1024, "cols": 2, "rows": 2}
+    ]
+  }
+}
