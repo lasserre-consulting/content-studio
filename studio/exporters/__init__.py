@@ -12,6 +12,8 @@ réellement (garde-fou : éviter de pousser une spritesheet 2D vers un perso 3D)
 
 - MemoriaExporter : mods FF9 (audio OGG, textures de modèles 3D).
 - GodotExporter   : projets Godot (sprites 2D PNG, audio ogg/wav).
+- UnityExporter   : projets Unity (Assets/, WAV conservé, réglages d'import
+  appliqués par un AssetPostprocessor déposé dans le projet).
 
 La racine de la cible est toujours passée en paramètre — jamais de chemin Steam
 ou de projet codé en dur.
@@ -19,6 +21,7 @@ ou de projet codé en dur.
 from .base import AssetKindSpec, EngineProfile, Exporter
 from .godot import GODOT_PROFILE, GodotExporter
 from .memoria import MEMORIA_PROFILE, MemoriaExporter, canonical_sfx_name
+from .unity import UNITY_PROFILE, UnityExporter
 
 __all__ = [
     "Exporter",
@@ -29,4 +32,6 @@ __all__ = [
     "canonical_sfx_name",
     "GodotExporter",
     "GODOT_PROFILE",
+    "UnityExporter",
+    "UNITY_PROFILE",
 ]
