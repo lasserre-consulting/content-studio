@@ -24,6 +24,9 @@
 #   pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 torch==2.6.0+cu124
 torchaudio==2.6.0+cu124
+# torchvision doit suivre torch à la version près (0.21 <-> torch 2.6).
+# Sans lui, les processors transformers retombent sur PIL (plus lent).
+torchvision==0.21.0+cu124
 
 # --- xformers : ABI verrouillée sur torch 2.6 -------------------------------
 # Seule roue cp311 compatible torch 2.6.0. Toute autre version →
