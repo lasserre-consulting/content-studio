@@ -15,11 +15,13 @@ llm:
   fallback: [ollama]       # bascule vers le LLM local si pas de clé API
   providers:
     anthropic:
-      model: claude-sonnet-4-6
+      model: claude-sonnet-5      # famille Claude 5 ; claude-opus-5 si besoin de plus
       max_tokens: 2048
     openai:
-      model: gpt-4o
+      model: gpt-5.5              # gpt-4o RETIRÉ par OpenAI le 2026-02-13 (ID mort)
     ollama:
+      # ⚠️ NE PAS passer à llama4-scout : ~55 Go, hors budget de ce poste
+      # (32 Go RAM / 8 Go VRAM). Un 8B reste le bon choix en fallback local.
       model: llama3.1
       host: http://localhost:11434
 
@@ -36,7 +38,9 @@ image:
       guidance_scale: 7.5
       negative_prompt: "blurry, low quality, deformed, bad anatomy, text, watermark, signature"
     fal-image:
-      model: fal-ai/flux/dev
+      # FLUX.2 (BFL, nov. 2025 ; variante klein jan. 2026). Remplace FLUX.1 dev.
+      # Alternatives fal : fal-ai/flux-2-flex (plus de contrôle), fal-ai/flux-2-dev.
+      model: fal-ai/flux-2-pro
 
 # --- VIDÉO (trop lourd en local sur 8 Go → cloud par défaut) ----------------
 video:
@@ -44,7 +48,10 @@ video:
   fallback: []
   providers:
     fal-video:
-      model: fal-ai/kling-video/v1/standard/text-to-video
+      # Kling 2.6 Pro : génère l'audio synchronisé avec la vidéo (supprime une
+      # étape de montage). Kling 3.0 existe aussi sur fal — vérifier l'ID exact
+      # sur fal.ai/explore/models avant de basculer.
+      model: fal-ai/kling-video/v2.6/pro/text-to-video
     ltx-local:               # expérimental : le plus léger des modèles vidéo
       model: Lightricks/LTX-Video
 

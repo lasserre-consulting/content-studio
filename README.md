@@ -38,16 +38,52 @@ Le reste du code ne change pas — le routeur la découvre seule.
 
 ```powershell
 python -m venv .venv ; .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt          # cœur + providers cloud (léger)
+pip install -r requirements.txt -c constraints.txt      # cœur + providers cloud (léger)
 
 # Providers locaux GPU (lourd) — installe torch CUDA d'abord :
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-pip install -r requirements-local.txt
+pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+pip install -r requirements-local.txt -c constraints.txt
 
 copy .env.example .env                    # renseigne tes clés
+python -m studio.doctor                   # vérifie la stack AVANT de générer
 ```
 
 > ⚠️ **ffmpeg requis** pour l'audio/vidéo : `winget install ffmpeg` (ou choco).
+
+## Discipline d'environnement — à lire avant tout `pip install`
+
+Cette stack fait cohabiter des paquets aux exigences contradictoires (audiocraft
+épingle torch 2.1, SDXL veut du torch récent). L'équilibre actuel est le fruit de
+plusieurs impasses résolues ; il tient par des épingles, pas par chance.
+
+**Trois fichiers, trois rôles :**
+
+| Fichier | Rôle |
+|---|---|
+| `requirements.txt` / `requirements-local.txt` | ce qu'on veut (intentions, bornes larges) |
+| `constraints.txt` | ce qu'on ne peut **pas** bouger, avec la raison de chaque épingle |
+| `requirements.lock.txt` | l'état complet connu-bon (152 paquets) — le filet de retour |
+
+**Règles :**
+
+1. **Toujours** passer `-c constraints.txt` à pip. Sans ça, une dépendance
+   transitive peut déplacer torch et casser la moitié de la stack.
+2. **Jamais** de `pip install -U` global. Les montées de version se font paquet
+   par paquet, avec `python -m studio.doctor` + `pytest` après chacune.
+3. **Avant** toute montée risquée, vérifier que `requirements.lock.txt` est à
+   jour (`pip freeze --all > requirements.lock.txt`) et commité.
+
+**Retour arrière si la stack casse :**
+
+```powershell
+pip install -r requirements.lock.txt
+python -m studio.doctor        # doit repasser au vert
+```
+
+**Signal de santé :** `python -m studio.doctor` (12 vérifications : torch/CUDA/GPU,
+ABI xformers, DLL sklearn, ffmpeg+libvorbis, rembg…) et `pytest -q` (122 tests).
+Les deux doivent être verts avant de considérer un changement d'environnement
+comme réussi.
 
 ## Utilisation
 

@@ -1,0 +1,67 @@
+# ============================================================================
+#  CONTRAINTES PORTEUSES — Content Studio
+# ----------------------------------------------------------------------------
+#  Ces épingles ne sont PAS des préférences : chacune corrige une casse réelle,
+#  reproductible, constatée sur ce poste. Les déplacer sans relancer
+#  `python -m studio.doctor` ET une génération réelle par modalité casse l'env.
+#
+#  USAGE — toujours passer ce fichier à pip :
+#      pip install -r requirements.txt       -c constraints.txt
+#      pip install -r requirements-local.txt -c constraints.txt
+#      pip install <nouveau-paquet>          -c constraints.txt
+#
+#  RETOUR ARRIÈRE — l'état complet connu-bon est dans requirements.lock.txt :
+#      pip install -r requirements.lock.txt
+#
+#  Cible validée : Python 3.11.9 / CUDA 12.4 / RTX 2080 SUPER (8 Go VRAM)
+# ============================================================================
+
+# --- Socle torch ------------------------------------------------------------
+# Tout le reste est calibré sur cette version. torch 2.14 existe (2026-09) mais
+# fait sauter xformers ET audiocraft d'un coup : migration à traiter comme un
+# chantier à part, jamais comme un `pip install -U`.
+# Installer via l'index CUDA, sinon pip prend la roue CPU :
+#   pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0+cu124
+torchaudio==2.6.0+cu124
+
+# --- xformers : ABI verrouillée sur torch 2.6 -------------------------------
+# Seule roue cp311 compatible torch 2.6.0. Toute autre version →
+# ImportError 'GroupName' à l'import d'audiocraft.
+# audiocraft n'a besoin que de l'IMPORT (`from xformers import ops`) ; le backend
+# d'attention réel est 'torch' (SDPA), donc aucun kernel xformers au runtime.
+xformers==0.0.29.post3
+
+# --- scikit-learn : contrainte OS, pas Python -------------------------------
+# La DLL `_isfinite` de sklearn >= 1.9 est BLOQUÉE par le Smart App Control de
+# Windows (« stratégie de contrôle d'application »). 1.5.2 a une réputation
+# établie et passe. Ce n'est pas un problème de compatibilité API.
+scikit-learn==1.5.2
+
+# --- audiocraft : à installer avec --no-deps --------------------------------
+# audiocraft 1.3.0 épingle torch==2.1 / xformers<0.0.23 / av==11. Une install
+# directe DOWNGRADE torch et casse SDXL. Procédure :
+#   pip install audiocraft==1.3.0 --no-deps
+#   pip install omegaconf hydra-core hydra_colorlog julius num2words sentencepiece \
+#               encodec einops dora-search flashy librosa torchmetrics av -c constraints.txt
+audiocraft==1.3.0
+
+# av 17 viole le pin av==11 d'audiocraft mais fonctionne au runtime.
+# Les avertissements de résolution pip sont attendus et inoffensifs.
+av==17.0.1
+
+# --- Stack image ------------------------------------------------------------
+diffusers==0.38.0
+transformers==5.9.0
+accelerate==1.13.0
+
+# safetensors : ATTENTION, 0.8.0rc1 est une release candidate épinglée par
+# accident. La stable 0.8.0 existe. À basculer lors du prochain passage, en
+# vérifiant que le chargement SDXL fonctionne toujours.
+safetensors==0.8.0rc1
+
+# --- Détourage / audio / numérique ------------------------------------------
+rembg==2.0.76
+onnxruntime==1.26.0
+kokoro==0.9.4
+numpy==2.4.6
