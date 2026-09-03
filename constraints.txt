@@ -35,6 +35,14 @@ torchvision==0.21.0+cu124
 # d'attention réel est 'torch' (SDPA), donc aucun kernel xformers au runtime.
 xformers==0.0.29.post3
 
+# --- kiwisolver : même contrainte OS que scikit-learn -----------------------
+# La DLL `_cext` de kiwisolver 1.5.x est BLOQUÉE par le Smart App Control de
+# Windows. Chaîne de casse : audiocraft -> torchmetrics -> torchmetrics.utilities.plot
+# -> matplotlib -> kiwisolver._cext -> ImportError, et donc plus d'audio du tout.
+# matplotlib arrive ici comme dépendance indirecte de k-diffusion (Stable Audio).
+# 1.4.5 a une réputation établie et passe.
+kiwisolver==1.4.5
+
 # --- scikit-learn : contrainte OS, pas Python -------------------------------
 # La DLL `_isfinite` de sklearn >= 1.9 est BLOQUÉE par le Smart App Control de
 # Windows (« stratégie de contrôle d'application »). 1.5.2 a une réputation
