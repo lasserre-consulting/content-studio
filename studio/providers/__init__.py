@@ -25,8 +25,10 @@ _PROVIDER_MODULES = [
     # Vidéo
     "studio.providers.video.fal_video",
     # Musique
+    "studio.providers.music.stableaudio_music",
     "studio.providers.music.musicgen_local",
     # SFX
+    "studio.providers.sfx.stableaudio_sfx",
     "studio.providers.sfx.audiogen_local",
     # Voix
     "studio.providers.tts.kokoro_local",
