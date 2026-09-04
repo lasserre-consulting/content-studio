@@ -33,10 +33,11 @@ PROJET_UNITY = Path(r"C:\Users\lasse\workspace\jeux mobiles\HeritageSorciere")
 # Fond BLANC et non gris : rembg est calibré pour du blanc, un fond gris fait
 # échouer le détourage en silence.
 STYLE = (
-    "single isolated object, centered, isolated on solid plain white background, "
-    "dark cozy witch cottage aesthetic, warm painterly illustration, "
-    "rich brush texture, aged patina, soft rim light, "
-    "mobile game item icon, no text, no shadow, no background elements"
+    "bold simplified game item icon, strong readable silhouette, "
+    "thick dark outline, high contrast, saturated colors, "
+    "flat shading with soft highlights, object fills the frame, "
+    "centered, isolated on solid plain white background, "
+    "warm aged fantasy palette, no text, no shadow, no background elements"
 )
 
 # Taille finale des sprites. Les cases font ~122 unités de référence ; 256 px
@@ -46,31 +47,66 @@ TAILLE_SPRITE = 256
 
 # (chaîne, niveau, nom du fichier, description)
 SPRITES = [
-    ("outils", 1, "outils-1", "a small rusty iron key, corroded, old"),
+    ("outils", 1, "outils-1", "a rusty orange iron key, ornate bow, warm copper tones"),
     # « screwdriver » puis « long metal shaft + wooden handle » ont tous deux
     # donné une hachette. Le marteau est un objet que SDXL rend de façon fiable.
-    ("outils", 2, "outils-2", "an old claw hammer, steel head, worn wooden handle"),
+    ("outils", 2, "outils-2", "an orange-handled hammer with a bright steel head"),
     # « leather toolbox » a donné un coffre au trésor doré. Une caisse en bois
     # cerclée de fer reste dans le registre domestique.
-    ("outils", 3, "outils-3", "an old wooden tool crate with iron corner brackets, open, hand tools inside"),
+    ("outils", 3, "outils-3", "a warm orange-brown toolbox with a handle on top, closed, brass fittings"),
 
-    ("nettoyage", 1, "nettoyage-1", "a folded grey cleaning rag"),
-    ("nettoyage", 2, "nettoyage-2", "a galvanised metal bucket with soapy water"),
-    ("nettoyage", 3, "nettoyage-3", "a glass jar of dark soap paste with a wooden brush"),
+    ("nettoyage", 1, "nettoyage-1", "a bright teal blue folded cloth rag, light and clean"),
+    ("nettoyage", 2, "nettoyage-2", "a bright blue bucket full of white foam bubbles"),
+    ("nettoyage", 3, "nettoyage-3", "a turquoise glass soap bottle with white bubbles, glossy"),
 
-    ("lumiere", 1, "lumiere-1", "a short melted candle stub, unlit"),
-    ("lumiere", 2, "lumiere-2", "a small brass oil lamp with glass chimney"),
-    ("lumiere", 3, "lumiere-3", "an ornate iron lantern, warm glowing flame inside"),
+    ("lumiere", 1, "lumiere-1", "a short cream white candle with a small bright yellow flame"),
+    ("lumiere", 2, "lumiere-2", "a golden yellow oil lamp glowing warmly, glass chimney"),
+    ("lumiere", 3, "lumiere-3", "a bright golden lantern radiating warm yellow light"),
 
-    ("reliques", 1, "reliques-1", "a faded torn sepia photograph, curled corners"),
-    ("reliques", 2, "reliques-2", "a tarnished silver locket on a chain, closed"),
-    ("reliques", 3, "reliques-3", "a polished silver locket, open, faint engraving"),
+    ("reliques", 1, "reliques-1", "an old photograph with a violet purple tint, torn corners"),
+    ("reliques", 2, "reliques-2", "a purple and silver oval locket, closed, ornate"),
+    ("reliques", 3, "reliques-3", "a bright silver locket open, glowing violet light inside"),
     # Le seul objet ouvertement surnaturel : il clôt le jeu.
     # Couverture explicitement SOMBRE : la première version avait une couverture
     # claire que rembg a prise pour du fond, ce qui a creusé le centre du livre.
-    ("reliques", 4, "reliques-4", "a closed ancient spellbook with a very dark "
-                                  "black leather cover, heavy brass corner clasps, "
-                                  "deep engraved symbols, three quarter view"),
+    ("reliques", 4, "reliques-4", "a closed spellbook, deep purple leather cover, "
+                                  "bright gold clasps and glowing violet rune, front view"),
+]
+
+# Décors : deux états par lieu. C'est la récompense de la rénovation — le
+# « avant / après » est ce que le joueur vient chercher dans un merge à méta.
+# Pas de détourage ici : ce sont des fonds, pas des objets.
+DECOR_STYLE = (
+    "interior view, wide shot, no people, no text, "
+    "warm painterly illustration, dark cozy witch cottage aesthetic, "
+    "rich atmospheric lighting, mobile game background art"
+)
+
+DECORS = [
+    ("cuisine-0", "an abandoned dusty old farmhouse kitchen, cobwebs, broken sink, "
+                  "grey cold light through shutters, neglected, gloomy"),
+    ("cuisine-1", "a restored warm farmhouse kitchen, copper pots, herbs hanging, "
+                  "golden lamplight, clean wooden table, cosy and alive"),
+
+    ("salon-0", "an abandoned dusty living room, sheets over furniture, cold fireplace, "
+                "faded wallpaper, dim grey light"),
+    ("salon-1", "a restored cosy living room, fire burning in the hearth, armchairs, "
+                "warm golden light, old mirror above the mantel"),
+
+    ("chambre-0", "an abandoned dusty bedroom, shutters closed, bare mattress, "
+                  "cold blue gloom, peeling paint"),
+    ("chambre-1", "a restored warm bedroom, made bed, open shutters, oil lamp on "
+                  "the bedside table, soft evening light"),
+
+    ("grenier-0", "a dark cluttered attic, sealed hatch, dusty crates, cobwebs, "
+                  "single shaft of cold light"),
+    ("grenier-1", "a lit attic room, lantern glowing, open trunks, old books and "
+                  "papers, warm mysterious light"),
+
+    ("serre-0", "an abandoned greenhouse, broken glass panes, dead withered plants, "
+                "cold overcast light, overgrown"),
+    ("serre-1", "a restored greenhouse at dusk, strange luminous plants, glass panes "
+                "repaired, warm violet and green glow, magical"),
 ]
 
 MUSIQUES = [
@@ -133,6 +169,62 @@ def generer_sprites(studio, exporter, limite=None, dry=False):
     return faits, echecs
 
 
+def generer_decors(studio, exporter, limite=None, dry=False):
+    """Décors de pièce. Pas de détourage : un fond n'a pas à être découpé."""
+    faits, echecs = [], []
+    lot = DECORS[:limite] if limite else DECORS
+
+    for i, (nom, description) in enumerate(lot, 1):
+        print(f"\n[{i}/{len(lot)}] decor {nom}")
+        print(f"    {description[:70]}...")
+        if dry:
+            continue
+
+        t0 = time.time()
+        try:
+            chemins = studio.sprite(description, name=f"decor-{nom}",
+                                    style=DECOR_STYLE, variants=1, transparent=False)
+        except Exception as e:  # noqa: BLE001
+            print(f"    ECHEC : {e}")
+            echecs.append(nom)
+            continue
+
+        src = Path(chemins[0] if isinstance(chemins, (list, tuple)) else chemins)
+        src = recadrer_decor(src)
+        dest = exporter.export(src, "sprite", f"decor-{nom}")
+        print(f"    OK en {time.time() - t0:.0f}s -> {dest.name}")
+        faits.append(dest)
+
+    return faits, echecs
+
+
+def recadrer_decor(png: Path) -> Path:
+    """Recadre en 4:3 paysage et ramène à 768 px de large.
+
+    SDXL rend du carré ; le panneau de la pièce est nettement plus large que
+    haut. Recadrer au centre plutôt que déformer.
+    """
+    from PIL import Image
+
+    im = Image.open(png).convert("RGB")
+    cible = 4 / 3
+    if im.width / im.height > cible:
+        h = im.height
+        w = int(h * cible)
+    else:
+        w = im.width
+        h = int(w / cible)
+
+    g = (im.width - w) // 2
+    t = (im.height - h) // 2
+    im = im.crop((g, t, g + w, t + h))
+
+    if im.width > 768:
+        im = im.resize((768, int(768 * im.height / im.width)), Image.LANCZOS)
+    im.save(png)
+    return png
+
+
 def generer_musiques(router, exporter, limite=None, dry=False):
     from studio.core import Modality
 
@@ -162,7 +254,7 @@ def generer_musiques(router, exporter, limite=None, dry=False):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--only", choices=["sprites", "music"])
+    ap.add_argument("--only", choices=["sprites", "decors", "music"])
     ap.add_argument("--limit", type=int, help="ne traiter que les N premiers")
     ap.add_argument("--dry-run", action="store_true", help="affiche le plan sans générer")
     args = ap.parse_args()
@@ -190,6 +282,10 @@ def main() -> int:
     if args.only in (None, "sprites"):
         studio = game_studio(str(RACINE / "outputs" / "heritage"))
         resultats["sprites"] = generer_sprites(studio, exporter, args.limit, args.dry_run)
+
+    if args.only in (None, "decors"):
+        studio = game_studio(str(RACINE / "outputs" / "heritage"))
+        resultats["décors"] = generer_decors(studio, exporter, args.limit, args.dry_run)
 
     if args.only in (None, "music"):
         resultats["musiques"] = generer_musiques(get_router(), exporter, args.limit, args.dry_run)
