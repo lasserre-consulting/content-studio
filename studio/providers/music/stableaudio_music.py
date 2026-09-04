@@ -20,6 +20,7 @@ class StableAudioMusic(StableAudioBase):
 
     default_model = "stabilityai/stable-audio-3-small-music"
     default_duration = 15
-    # La "small" gère des morceaux complets ; on plafonne à 3 min, largement
-    # au-delà de ce dont un jeu a besoin pour une BGM bouclée.
-    max_duration = 180
+    # 120 s est la longueur NATIVE du modèle (sample_size = 5 292 032 à 44,1 kHz),
+    # mesurée sur ce poste : demander plus rend quand même 120 s. Ne pas remonter
+    # ce plafond sans changer de variante (la "medium" va jusqu'à 6:20).
+    max_duration = 120

@@ -96,13 +96,15 @@ def test_plafonds_de_duree_coherents():
     """Un SFX est court, une BGM est longue — les plafonds doivent le refléter."""
     assert StableAudioSFX.default_duration < StableAudioMusic.default_duration
     assert StableAudioSFX.max_duration < StableAudioMusic.max_duration
-    assert StableAudioMusic.max_duration >= 60
+    # 120 s = longueur native mesurée du checkpoint small-music
+    # (sample_size 5 292 032 à 44,1 kHz). Demander plus rend quand même 120 s.
+    assert StableAudioMusic.max_duration == 120
 
 
 @pytest.mark.parametrize(
     "cls, demande, attendu",
     [
-        (StableAudioMusic, 9999, 180),   # écrêté au plafond
+        (StableAudioMusic, 9999, 120),   # écrêté au plafond NATIF du modèle
         (StableAudioMusic, 0, 1),        # plancher à 1 s
         (StableAudioMusic, 30, 30),      # valeur raisonnable conservée
         (StableAudioSFX, 9999, 30),

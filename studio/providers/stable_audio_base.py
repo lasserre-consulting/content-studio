@@ -21,6 +21,7 @@ peu de marge si SDXL est chargé en parallèle.
 from __future__ import annotations
 
 import logging
+import random
 from pathlib import Path
 
 from studio.config import Config
@@ -116,6 +117,14 @@ class StableAudioBase(BaseProvider):
         steps = int(req.get("steps") or self.config.get("steps", 8))
         cfg_scale = float(req.get("cfg_scale") or self.config.get("cfg_scale", 1.0))
 
+        # Graine explicite, pour deux raisons.
+        # 1) Bug Windows : laissee a -1, stable-audio-tools tire lui-meme
+        #    `np.random.randint(0, 2**32 - 1)` SANS dtype, ce qui deborde l'int32
+        #    sous Windows et leve « high is out of bounds for int32 ».
+        # 2) Reproductibilite : la graine effective part dans meta, donc une
+        #    generation reussie peut etre rejouee a l'identique.
+        seed = req.seed if req.seed is not None else random.randint(0, 2**31 - 1)
+
         sample_rate = model_config["sample_rate"]
         sample_size = model_config["sample_size"]
 
@@ -134,10 +143,20 @@ class StableAudioBase(BaseProvider):
                 conditioning=conditioning,
                 sample_size=sample_size,
                 sampler_type="pingpong",
+                seed=seed,
                 device=device,
             )
             # (batch, canaux, échantillons) -> (canaux, échantillons) attendu par torchaudio
             output = rearrange(output, "b d n -> d (b n)")
+
+            # Le modèle rend TOUJOURS `sample_size` échantillons (≈11 s sur les
+            # "small"), quelle que soit la durée demandée : `seconds_total`
+            # conditionne le CONTENU, pas la longueur du tenseur. Sans cette
+            # coupe, un SFX de 5 s arrive en 11 s, avec du silence ou de la
+            # matière parasite au bout.
+            attendu = int(duration * sample_rate)
+            if output.shape[-1] > attendu:
+                output = output[..., :attendu]
             # Normalisation puis conversion en PCM 16 bits stéréo.
             output = (
                 output.to(torch.float32)
@@ -163,6 +182,7 @@ class StableAudioBase(BaseProvider):
                 "duration": duration,
                 "steps": steps,
                 "cfg_scale": cfg_scale,
+                "seed": seed,
                 "sample_rate": sample_rate,
                 "device": device,
             },

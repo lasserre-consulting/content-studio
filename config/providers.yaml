@@ -57,9 +57,8 @@ video:
 
 # --- MUSIQUE ----------------------------------------------------------------
 music:
-  # Bascule prévue vers stableaudio-music (voir note en bas de fichier).
-  active: musicgen-local
-  fallback: []
+  active: stableaudio-music
+  fallback: [musicgen-local]     # repli si stable-audio-tools est absent
   providers:
     musicgen-local:
       model: facebook/musicgen-medium
@@ -72,8 +71,8 @@ music:
 
 # --- EFFETS SONORES ---------------------------------------------------------
 sfx:
-  active: audiogen-local
-  fallback: []
+  active: stableaudio-sfx
+  fallback: [audiogen-local]     # repli si stable-audio-tools est absent
   providers:
     audiogen-local:
       model: facebook/audiogen-medium
@@ -94,20 +93,25 @@ tts:
       lang: f                 # 'f' = français, 'a' = anglais US
 
 # ============================================================================
-#  NOTE — migration audio en cours (2026-09-03)
+#  NOTE — migration audio EFFECTUÉE (2026-09-04)
 # ----------------------------------------------------------------------------
-#  Les providers `stableaudio-music` / `stableaudio-sfx` (Stable Audio 3,
-#  Stability AI, poids ouverts) sont DÉCLARÉS mais pas encore `active` : ils
-#  attendent une validation en génération réelle sur ce poste.
+#  Stable Audio 3 (Stability AI, poids ouverts) remplace audiocraft.
+#  Validé en génération réelle sur ce poste (RTX 2080 SUPER, 8 Go) :
 #
-#  Pour les essayer sans rien basculer :
-#      router.music("thème de combat", provider="stableaudio-music")
-#      router.sfx("potion qui bout",   provider="stableaudio-sfx")
+#                      audiocraft          Stable Audio 3
+#      échantillonnage  32 000 Hz           44 100 Hz
+#      canaux           mono                stéréo
+#      génération 30 s  139 s               15 s
+#      durée max        30 s                120 s
+#      reproductible    non                 oui (graine dans meta)
 #
-#  Une fois validés, passer `active:` dessus et mettre musicgen/audiogen en
-#  `fallback`. Enjeu réel : Stable Audio 3 permet de retirer audiocraft, qui
-#  est la cause unique de toute la cascade d'épingles (cf. constraints.txt).
+#  MusicGen et AudioGen restent en `fallback` : ils prennent le relais si
+#  stable-audio-tools n'est pas installé. Ne pas les retirer tant que
+#  l'étape C (retrait d'audiocraft) n'est pas faite.
 #
-#  ⚠️ Le routeur ne bascule PAS sur le fallback si generate() lève — seulement
-#  si available() renvoie False. Un `active` cassé casse donc la génération.
+#  ⚠️ Le routeur ne bascule sur le fallback QUE si available() renvoie False,
+#  jamais sur une exception de generate(). Un `active` cassé casse l'audio.
+#
+#  Installation de stable-audio-tools : voir requirements-local.txt (la version
+#  PyPI 0.0.19 est ANTÉRIEURE à Stable Audio 3 et ne fonctionne pas).
 # ============================================================================

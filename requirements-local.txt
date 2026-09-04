@@ -38,3 +38,49 @@ onnxruntime           # backend CPU ; onnxruntime-gpu pour accélérer si voulu
 
 # Optimisation mémoire VRAM (utile sur 8 Go) — version épinglée pour torch 2.6 :
 # xformers==0.0.29.post3   (cf. recette audiocraft ci-dessus ; requis aussi par audiocraft à l'import)
+
+# ============================================================================
+#  STABLE AUDIO 3 (musique + SFX) — recette validée le 2026-09-04
+# ----------------------------------------------------------------------------
+#  ⚠️ NE PAS faire `pip install stable-audio-tools` : la version PyPI (0.0.19)
+#  est ANTÉRIEURE à Stable Audio 3 et échoue avec
+#      TransformerBlock.__init__() got an unexpected keyword argument
+#      'local_add_cond_dim'
+#  Il faut la version git (0.0.20+). Quatre pièges, dans l'ordre rencontré :
+#
+#  1) L'extra `pypesq` (métrique d'ÉVALUATION, inutile en inférence) ne compile
+#     pas sous Windows -> installer avec --no-deps.
+#  2) Le pyproject git exige Python >=3.10,<3.11 ; ce poste est en 3.11.9. La
+#     borne haute est conservatrice : --ignore-requires-python passe et le
+#     paquet s'importe et fonctionne sans problème.
+#  3) --no-deps laisse des modules d'exécution manquants, à installer à la main
+#     (liste ci-dessous).
+#  4) Bug Windows dans stable-audio-tools : il tire lui-même
+#     `np.random.randint(0, 2**32 - 1)` SANS dtype -> « high is out of bounds
+#     for int32 ». Contourné côté studio en passant une graine explicite
+#     (cf. studio/providers/stable_audio_base.py) — ne PAS patcher site-packages.
+#
+#  Procédure :
+#     pip install "git+https://github.com/Stability-AI/stable-audio-tools.git" \
+#         --no-deps --ignore-requires-python -c constraints.txt
+#     pip install k-diffusion x-transformers local-attention vector-quantize-pytorch \
+#         alias-free-torch ema-pytorch descript-audio-codec \
+#         einops-exts prefigure auraloss PyWavelets -c constraints.txt
+#
+#  ⚠️ k-diffusion tire matplotlib -> kiwisolver, dont la DLL 1.5.x est bloquée
+#     par le Smart App Control de Windows. L'épingle kiwisolver==1.4.5 de
+#     constraints.txt est OBLIGATOIRE, sinon audiocraft casse à l'import.
+#
+#  Modèles (gated sur HuggingFace : accepter la licence sur CHAQUE page, puis
+#  poser HF_TOKEN dans .env) :
+#     stabilityai/stable-audio-3-small-music   0.6 B — 44,1 kHz stéréo, 120 s max
+#     stabilityai/stable-audio-3-small-sfx     0.6 B — 44,1 kHz stéréo
+#  Mesuré sur RTX 2080 SUPER : 30 s de musique en ~15 s, 8 steps, ~2-4 Go VRAM.
+#
+#  flash_attn absent = normal sous Windows : le code se rabat proprement dessus.
+# ============================================================================
+stable-audio-tools>=0.0.20   # DEPUIS GIT — voir procédure ci-dessus
+einops-exts
+prefigure
+auraloss
+PyWavelets
