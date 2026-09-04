@@ -125,7 +125,11 @@ namespace ContentStudio.Editor
 {
     public sealed class ContentStudioAssetPostprocessor : AssetPostprocessor
     {
+        // Deux racines : Art/Sprites pour les sprites référencés dans une scène,
+        // Resources/Items pour ceux chargés par code (Resources.Load). Un projet
+        // dont l'interface est construite par script a besoin de la seconde.
         const string SpritesRoot = "Assets/Art/Sprites/";
+        const string ResourceItemsRoot = "Assets/Resources/Items/";
         const string MusicRoot   = "Assets/Audio/Music/";
         const string SfxRoot     = "Assets/Audio/SFX/";
         const string VoiceRoot   = "Assets/Audio/Voice/";
@@ -135,7 +139,8 @@ namespace ContentStudio.Editor
 
         void OnPreprocessTexture()
         {
-            if (!assetPath.StartsWith(SpritesRoot)) return;
+            if (!assetPath.StartsWith(SpritesRoot) &&
+                !assetPath.StartsWith(ResourceItemsRoot)) return;
 
             var importer = (TextureImporter)assetImporter;
             importer.textureType         = TextureImporterType.Sprite;
@@ -219,7 +224,8 @@ class UnityExporter(Exporter):
 
     # -- sprite ---------------------------------------------------------------
     def export_sprite(
-        self, src_path: Path | str, name: str, *, category: str | None = None
+        self, src_path: Path | str, name: str, *,
+        category: str | None = None, resources: bool = True
     ) -> Path:
         """Dépose un sprite PNG sous Assets/Art/Sprites/[<category>/]<slug>.png.
 
@@ -232,7 +238,9 @@ class UnityExporter(Exporter):
             raise ValueError(
                 f"[unity] sprite attendu en .png, reçu .{ext}. Convertir en amont."
             )
-        parts = ["Assets", "Art", "Sprites"]
+        # Resources/ est le seul emplacement chargeable par code sans référence
+        # de scène — indispensable quand l'interface est construite par script.
+        parts = ["Assets", "Resources", "Items"] if resources             else ["Assets", "Art", "Sprites"]
         if category:
             parts.append(_slugify(category))
         parts.append(f"{_slugify(name)}.png")

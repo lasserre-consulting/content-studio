@@ -59,14 +59,24 @@ def test_music_et_sfx_ont_des_representations_distinctes():
 # --------------------------------------------------------------------------- #
 # Sprites                                                                      #
 # --------------------------------------------------------------------------- #
-def test_sprite_atterrit_dans_assets_art_sprites(projet, png):
+def test_sprite_atterrit_par_defaut_dans_resources(projet, png):
+    """Par défaut on vise Resources/ : c'est le seul emplacement chargeable par
+    code (Resources.Load) sans référence de scène, donc le seul utilisable quand
+    l'interface est construite par script."""
     dest = UnityExporter(projet).export_sprite(png, "Goblin Presseur")
-    assert dest == projet / "Assets" / "Art" / "Sprites" / "goblin-presseur.png"
+    assert dest == projet / "Assets" / "Resources" / "Items" / "goblin-presseur.png"
     assert dest.exists()
 
 
+def test_sprite_peut_viser_art_sprites(projet, png):
+    """resources=False pour un sprite qu'on référencera dans une scène."""
+    dest = UnityExporter(projet).export_sprite(png, "Decor", resources=False)
+    assert dest == projet / "Assets" / "Art" / "Sprites" / "decor.png"
+
+
 def test_sprite_avec_categorie(projet, png):
-    dest = UnityExporter(projet).export_sprite(png, "Morra", category="Ennemis")
+    dest = UnityExporter(projet).export_sprite(png, "Morra",
+                                               category="Ennemis", resources=False)
     assert dest == projet / "Assets" / "Art" / "Sprites" / "ennemis" / "morra.png"
 
 
@@ -118,7 +128,7 @@ def test_audio_refuse_un_type_inconnu(projet, wav):
 # --------------------------------------------------------------------------- #
 def test_export_route_selon_le_kind(projet, png, wav):
     exp = UnityExporter(projet)
-    assert exp.export(png, "sprite", "a").parent.name == "Sprites"
+    assert exp.export(png, "sprite", "a").parent.name == "Items"
     assert exp.export(wav, "music", "b").parent.name == "Music"
     assert exp.export(wav, "voice", "c").parent.name == "Voice"
 
@@ -138,6 +148,7 @@ def test_postprocessor_cible_les_bons_chemins(projet):
     contenu = UnityExporter(projet).install_postprocessor().read_text(encoding="utf-8")
     for chemin in (
         "Assets/Art/Sprites/",
+        "Assets/Resources/Items/",
         "Assets/Audio/Music/",
         "Assets/Audio/SFX/",
         "Assets/Audio/Voice/",
