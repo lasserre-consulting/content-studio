@@ -58,7 +58,9 @@ video:
 # --- MUSIQUE ----------------------------------------------------------------
 music:
   active: stableaudio-music
-  fallback: [musicgen-local]     # repli si stable-audio-tools est absent
+  # Poids MusicGen supprimés du cache (3,7 Go) : le garder en fallback
+  # relancerait un téléchargement silencieux au pire moment.
+  fallback: []
   providers:
     musicgen-local:
       model: facebook/musicgen-medium
@@ -72,7 +74,8 @@ music:
 # --- EFFETS SONORES ---------------------------------------------------------
 sfx:
   active: stableaudio-sfx
-  fallback: [audiogen-local]     # repli si stable-audio-tools est absent
+  # Poids AudioGen supprimés du cache (3,7 Go), même raison.
+  fallback: []
   providers:
     audiogen-local:
       model: facebook/audiogen-medium
