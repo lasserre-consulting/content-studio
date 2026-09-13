@@ -50,7 +50,7 @@ pip install -r requirements/profiles/full-local.txt
 
 copy .env.example .env                    # renseigne tes clés
 python -m studio.doctor                   # vérifie la stack AVANT de générer
-python -m studio.dependency_health --strict
+python scripts/dependency_compat_report.py --strict
 ```
 
 > ⚠️ **ffmpeg requis** pour l'audio/vidéo : `winget install ffmpeg` (ou choco).
@@ -95,7 +95,7 @@ comme réussi.
 **Rapport de compatibilité automatisé :**
 
 ```powershell
-python -m studio.dependency_health --strict --format markdown --out dependency-report.md
+python scripts/dependency_compat_report.py --strict --format markdown --out dependency-report.md
 ```
 
 Le rapport vérifie l'alignement `constraints`/`lock`, l'épinglage SHA des dépendances

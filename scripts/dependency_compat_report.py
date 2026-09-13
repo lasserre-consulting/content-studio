@@ -8,8 +8,8 @@ sans charger de modèle lourd. Le rapport est purement textuel, basé sur :
   - requirements/profiles/*.txt
 
 Usage :
-    python -m studio.dependency_health
-    python -m studio.dependency_health --strict
+    python scripts/dependency_compat_report.py
+    python scripts/dependency_compat_report.py --strict
 """
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ class Report:
         return sum(1 for f in self.findings if f.level == "warn")
 
 
-def _read_specs(path: Path) -> dict[str, tuple[str, str]]:
+def read_specs(path: Path) -> dict[str, tuple[str, str]]:
     """Parse un fichier requirements/constraints -> {name: (op, value)}."""
     specs: dict[str, tuple[str, str]] = {}
     if not path.exists():
@@ -88,7 +88,7 @@ def _read_specs(path: Path) -> dict[str, tuple[str, str]]:
     return specs
 
 
-def _check_profiles(root: Path) -> list[Finding]:
+def check_profiles(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     profiles_dir = root / "requirements" / "profiles"
     if not profiles_dir.exists():
@@ -101,7 +101,7 @@ def _check_profiles(root: Path) -> list[Finding]:
     return findings
 
 
-def _check_git_sha_pin(req_local: dict[str, tuple[str, str]], req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
+def check_git_sha_pin(req_local: dict[str, tuple[str, str]], req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
     findings: list[Finding] = []
     for source_name, specs in (("requirements-local.txt", req_local), ("requirements.lock.txt", req_lock)):
         op_val = specs.get("stable-audio-tools")
@@ -122,7 +122,7 @@ def _check_git_sha_pin(req_local: dict[str, tuple[str, str]], req_lock: dict[str
     return findings
 
 
-def _check_lock_alignment(constraints: dict[str, tuple[str, str]], req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
+def check_lock_alignment(constraints: dict[str, tuple[str, str]], req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
     findings: list[Finding] = []
     for package in CRITICAL_PACKAGES:
         c = constraints.get(package)
@@ -140,9 +140,11 @@ def _check_lock_alignment(constraints: dict[str, tuple[str, str]], req_lock: dic
     return findings
 
 
-def _check_prerelease_markers(req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
+def check_prerelease_markers(req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
     findings: list[Finding] = []
-    for name, (_op, value) in req_lock.items():
+    for name, (op, value) in req_lock.items():
+        if op != "==":
+            continue
         lowered = value.lower()
         if any(tag in lowered for tag in ("rc", "a", "b")) and re.search(r"\d(rc|a|b)\d", lowered):
             findings.append(Finding("warn", "prerelease", f"{name}={value} est une pré-release"))
@@ -152,9 +154,9 @@ def _check_prerelease_markers(req_lock: dict[str, tuple[str, str]]) -> list[Find
 
 
 def build_report(root: Path) -> Report:
-    constraints = _read_specs(root / "constraints.txt")
-    req_local = _read_specs(root / "requirements-local.txt")
-    req_lock = _read_specs(root / "requirements.lock.txt")
+    constraints = read_specs(root / "constraints.txt")
+    req_local = read_specs(root / "requirements-local.txt")
+    req_lock = read_specs(root / "requirements.lock.txt")
 
     findings: list[Finding] = []
     if not req_lock:
@@ -162,14 +164,14 @@ def build_report(root: Path) -> Report:
     else:
         findings.append(Finding("info", "lock", f"lock chargé ({len(req_lock)} paquets parsés)"))
 
-    findings.extend(_check_profiles(root))
-    findings.extend(_check_git_sha_pin(req_local, req_lock))
-    findings.extend(_check_lock_alignment(constraints, req_lock))
-    findings.extend(_check_prerelease_markers(req_lock))
+    findings.extend(check_profiles(root))
+    findings.extend(check_git_sha_pin(req_local, req_lock))
+    findings.extend(check_lock_alignment(constraints, req_lock))
+    findings.extend(check_prerelease_markers(req_lock))
     return Report(findings=findings)
 
 
-def _render_markdown(report: Report) -> str:
+def render_markdown(report: Report) -> str:
     lines = [
         "# Dependency Compatibility Report",
         "",
@@ -184,7 +186,7 @@ def _render_markdown(report: Report) -> str:
     return "\n".join(lines)
 
 
-def _render_json(report: Report) -> str:
+def render_json(report: Report) -> str:
     payload = {
         "errors": report.errors,
         "warnings": report.warnings,
@@ -200,8 +202,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", help="chemin de sortie (sinon stdout)")
     args = parser.parse_args(argv)
 
-    report = build_report(Path.cwd())
-    rendered = _render_json(report) if args.format == "json" else _render_markdown(report)
+    root = Path(__file__).resolve().parent.parent
+    report = build_report(root)
+    rendered = render_json(report) if args.format == "json" else render_markdown(report)
 
     if args.out:
         Path(args.out).write_text(rendered, encoding="utf-8")

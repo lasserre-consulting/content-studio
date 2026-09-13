@@ -14,6 +14,9 @@ on:
         default: false
         type: boolean
 
+permissions:
+  contents: read
+
 jobs:
   dependency-matrix:
     name: "${{ matrix.profile }} / py${{ matrix.python-version }}"
@@ -68,7 +71,7 @@ jobs:
       - name: Dependency compatibility report
         shell: pwsh
         run: |
-          python -m studio.dependency_health --strict --format markdown --out dependency-report.md
+          python scripts/dependency_compat_report.py --strict --format markdown --out dependency-report.md
           Get-Content dependency-report.md
 
       - name: Smoke test génération réelle courte (procédural)
