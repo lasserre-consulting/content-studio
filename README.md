@@ -38,14 +38,19 @@ Le reste du code ne change pas — le routeur la découvre seule.
 
 ```powershell
 python -m venv .venv ; .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt -c constraints.txt      # cœur + providers cloud (léger)
+pip install -r requirements/profiles/core.txt           # cœur + providers cloud (léger)
 
-# Providers locaux GPU (lourd) — installe torch CUDA d'abord :
-pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
-pip install -r requirements-local.txt -c constraints.txt
+# Profils locaux par modalité (réduit les collisions de dépendances) :
+pip install -r requirements/profiles/image-local.txt
+pip install -r requirements/profiles/audio-local.txt
+pip install -r requirements/profiles/tts-local.txt
+
+# Stack locale complète (si nécessaire) :
+pip install -r requirements/profiles/full-local.txt
 
 copy .env.example .env                    # renseigne tes clés
 python -m studio.doctor                   # vérifie la stack AVANT de générer
+python -m studio.dependency_health --strict
 ```
 
 > ⚠️ **ffmpeg requis** pour l'audio/vidéo : `winget install ffmpeg` (ou choco).
@@ -56,13 +61,13 @@ Cette stack fait cohabiter des paquets aux exigences contradictoires (audiocraft
 épingle torch 2.1, SDXL veut du torch récent). L'équilibre actuel est le fruit de
 plusieurs impasses résolues ; il tient par des épingles, pas par chance.
 
-**Trois fichiers, trois rôles :**
+**Trois niveaux, un lock unique :**
 
 | Fichier | Rôle |
 |---|---|
-| `requirements.txt` / `requirements-local.txt` | ce qu'on veut (intentions, bornes larges) |
+| `requirements/profiles/*.txt` | profils d'installation par modalité (core / image / audio / tts / full) |
 | `constraints.txt` | ce qu'on ne peut **pas** bouger, avec la raison de chaque épingle |
-| `requirements.lock.txt` | l'état complet connu-bon (152 paquets) — le filet de retour |
+| `requirements.lock.txt` | lock reproductible (source unique, à régénérer automatiquement) |
 
 **Règles :**
 
@@ -71,7 +76,9 @@ plusieurs impasses résolues ; il tient par des épingles, pas par chance.
 2. **Jamais** de `pip install -U` global. Les montées de version se font paquet
    par paquet, avec `python -m studio.doctor` + `pytest` après chacune.
 3. **Avant** toute montée risquée, vérifier que `requirements.lock.txt` est à
-   jour (`pip freeze --all > requirements.lock.txt`) et commité.
+   jour et commité via `python scripts/update_lock.py`.
+4. Les dépendances Git critiques (ex. stable-audio-tools) doivent être
+   épinglées par **SHA de commit**, jamais par branche/tag flottant.
 
 **Retour arrière si la stack casse :**
 
@@ -84,6 +91,28 @@ python -m studio.doctor        # doit repasser au vert
 ABI xformers, DLL sklearn, ffmpeg+libvorbis, rembg…) et `pytest -q` (122 tests).
 Les deux doivent être verts avant de considérer un changement d'environnement
 comme réussi.
+
+**Rapport de compatibilité automatisé :**
+
+```powershell
+python -m studio.dependency_health --strict --format markdown --out dependency-report.md
+```
+
+Le rapport vérifie l'alignement `constraints`/`lock`, l'épinglage SHA des dépendances
+Git et la présence des profils d'installation.
+
+### Politique de mise à jour (cadence mensuelle)
+
+1. Ouvrir une fenêtre dédiée (une fois par mois) pour monter **un paquet à la fois**.
+2. Après chaque montée : `python -m studio.doctor`, `pytest -q`, puis un smoke test réel.
+3. En cas d'écart : rollback immédiat sur `requirements.lock.txt`.
+4. Régénérer le lock via `python scripts/update_lock.py` et commiter dans la même PR.
+
+### Cache interne (wheelhouse) recommandé
+
+Pour stabiliser les builds CI et éviter les ruptures amont, conserver un wheelhouse
+des versions validées (artefacts CI ou miroir interne), puis installer depuis ce
+cache en priorité.
 
 ## Utilisation
 
