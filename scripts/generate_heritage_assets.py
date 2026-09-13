@@ -107,6 +107,153 @@ DECORS = [
                 "cold overcast light, overgrown"),
     ("serre-1", "a restored greenhouse at dusk, strange luminous plants, glass panes "
                 "repaired, warm violet and green glow, magical"),
+
+    # -- les onze pièces annoncées ----------------------------------------
+    #
+    # Elles ne sont pas jouables, mais elles sont VUES : la coupe du manoir les
+    # montre toutes les seize. Sans image, onze aplats gris au milieu de cinq
+    # peintures — et la promesse « grande maison, petit contenu » devient
+    # « maison à moitié dessinée ».
+    #
+    # Chaque état délabré illustre la RAISON DU VERROU écrite dans
+    # GameContent.cs — l'escalier sans marches, les toiles retournées, le mur
+    # sans porte. C'est ce qui fait d'une pièce fermée une promesse plutôt
+    # qu'un refus, et ça ne marche que si l'image dit la même chose que le
+    # texte.
+    #
+    # La dominante suit l'étage, comme CADRE.md le demande pour tenir la
+    # cohérence sur trente-deux images : sous-sol pierre et vert froid,
+    # rez-de-chaussée bois chaud, premier tissus fanés, combles poussière
+    # dorée, dehors bleu de nuit.
+
+    ("cave-0", "an abandoned stone cellar, damp green-stained walls, old barrels "
+               "and broken crates, a dark wet stain spreading across the floor, "
+               "cold green gloom"),
+    ("cave-1", "a restored stone cellar, tidy racks of preserve jars, swept floor, "
+               "lantern hanging, warm amber light on damp stone"),
+
+    # « Il n'y a pas de porte. Il y en avait une. »
+    ("laboratoire-0", "a cellar wall where a doorway has been bricked up with "
+                      "mismatched bricks, faint violet light seeping through the "
+                      "cracks, cold darkness, stone floor"),
+    ("laboratoire-1", "a witch alchemy laboratory, glass alembics and bubbling "
+                      "violet potions, shelves of labelled jars, warm golden and "
+                      "violet light, magical"),
+
+    # « L'escalier a perdu ses marches, de la sixième à la douzième. »
+    ("hall-0", "an abandoned manor entrance hall, grand wooden staircase with a "
+               "whole section of steps missing leaving a gap, dust sheets, cold "
+               "grey light from a tall window"),
+    ("hall-1", "a restored manor entrance hall, repaired grand staircase, polished "
+               "warm wood, rug, chandelier glowing golden"),
+
+    # « La table est mise pour douze. Personne n'est venu. »
+    ("salle-a-manger-0", "an abandoned dining room, long table still set for twelve "
+                         "with dusty plates and grey cobwebs between the glasses, "
+                         "chairs pushed back, cold dim light"),
+    ("salle-a-manger-1", "a restored dining room, long table set for a feast, lit "
+                         "candles down the middle, warm golden light, garlands of "
+                         "dried herbs"),
+
+    # « La clé n'a jamais été retrouvée. »
+    ("bibliotheque-0", "a dim dusty manor library behind a heavy locked door with "
+                       "an empty keyhole, tall bookshelves in shadow, cold shafts "
+                       "of light through shutters"),
+    ("bibliotheque-1", "a restored manor library, shelves full of books, rolling "
+                       "ladder, deep armchair, reading lamp, warm amber light"),
+
+    # « La porte est fermée de l'intérieur. »
+    ("chambre-enfant-0", "an abandoned child bedroom, small iron bed, faded cloth "
+                         "toys on the floor, door shut, cold blue gloom, thick dust"),
+    ("chambre-enfant-1", "a restored child bedroom, made bed with a quilt, wooden "
+                         "toys on a shelf, open window, soft warm daylight"),
+
+    # « Le plafond s'est effondré dans la baignoire. »
+    ("salle-de-bain-0", "a ruined bathroom, collapsed ceiling plaster and broken "
+                        "laths fallen into an old clawfoot bathtub, cold grey "
+                        "daylight falling through the hole above"),
+    ("salle-de-bain-1", "a restored bathroom, repaired ceiling, gleaming clawfoot "
+                        "bathtub, candles and potted plants, warm soft light"),
+
+    # « Les toiles sont retournées contre le mur. Toutes. »
+    ("couloir-portraits-0", "a dark manor corridor lined with framed paintings all "
+                            "turned face against the wall showing only their backs, "
+                            "dusty runner carpet, cold dim light"),
+    ("couloir-portraits-1", "a restored manor corridor, framed portraits hung facing "
+                            "the room, wall sconces glowing, polished floor, warm light"),
+
+    # « L'échelle a cédé. Quelque chose bat des ailes là-haut. »
+    ("colombier-0", "an abandoned stone dovecote loft, broken ladder lying on the "
+                    "floor, scattered feathers, rows of empty nesting holes, dusty "
+                    "shafts of cold light"),
+    ("colombier-1", "a restored dovecote loft, new wooden ladder, white doves in the "
+                    "nesting holes, warm evening light through the openings"),
+
+    # « Les ronces ont refermé le passage derrière elles. »
+    ("jardin-0", "an overgrown abandoned garden, dense thorny brambles closing the "
+                 "path completely, dead hedges and a broken bench, cold overcast light"),
+    ("jardin-1", "a restored night garden, cleared gravel paths, luminous flowers, "
+                 "hanging lanterns, warm violet and green glow, magical"),
+
+    # « La corde remonte seule quand on la lâche. »
+    ("puits-0", "an old stone well in an abandoned courtyard at dusk, dark rope "
+                "hanging taut into the shaft, wet mossy stones, ivy, cold blue gloom"),
+    ("puits-1", "a restored stone well at dusk, new rope and bucket, flowers planted "
+                "around the base, lantern light, gentle violet glow rising from the water"),
+]
+
+# Fonds d'écran. Ce ne sont ni des objets ni des pièces : pas de détourage, et
+# pas de recadrage 4:3 non plus — un fond couvre un écran portrait, on le garde
+# carré et c'est l'affichage qui recouvre.
+#
+# Le ciel doit rester DISCRET : il passe derrière la coupe du manoir, à faible
+# opacité. D'où « low contrast », « very dark », et surtout le refus explicite
+# d'un horizon, d'une lune ou d'un paysage — SDXL en pose un dès qu'on dit
+# « ciel », et une ligne d'horizon au milieu d'une maison en coupe est un
+# non-sens qu'on ne peut plus enlever.
+FOND_STYLE = (
+    "painterly atmospheric texture, very dark, low contrast, soft, "
+    "no subject, no people, no text, mobile game background art"
+)
+
+# « no horizon / no landscape » ne suffit PAS : le premier tirage a rendu des
+# montagnes et des sapins sous un ciel parfait. Interdire un objet ne marche pas ;
+# imposer un CADRAGE où il ne peut pas exister, si. « Looking straight up at the
+# zenith » supprime l'horizon parce qu'un zénith n'en a pas.
+FONDS = [
+    ("ciel", "looking straight up at the zenith of a deep indigo and violet night "
+             "sky, faint scattered distant stars, thin drifting mist and haze, "
+             "nothing but sky filling the whole frame, very dark and subtle, "
+             "even all over"),
+]
+
+# Les bestioles du manoir. Elles ne sont pas de la décoration ajoutée : Cendre
+# est un objet unique promis par JEU.md — « décor, purement visuel », gagné en
+# restaurant le salon — et la chauve-souris est écrite dans la raison du verrou
+# du colombier : « L'échelle a cédé. Quelque chose bat des ailes là-haut. »
+#
+# ⚠ On ne génère PAS l'animation. Une sonde l'a confirmé et la recherche aussi :
+# SDXL rend de très belles poses uniques et des images d'animation incohérentes.
+# Deux demandes de chat « debout, quatre pattes séparées » ont rendu deux chats
+# ASSIS. Le cycle de marche est donc articulé par code (voir Bestiaire.cs) ;
+# ici on ne produit qu'une silhouette, et le jeu la découpe et l'anime.
+#
+# « Silhouette » est le mot qui fait céder la pose : un chat qui MARCHE de profil
+# est un pictogramme si courant que le modèle le rend sans discuter, là où
+# « standing, four legs separated » se fait ignorer deux fois de suite.
+BESTIOLE_STYLE = (
+    "flat solid silhouette, single flat color shape, clean simple outline, "
+    "side profile, whole body inside the frame, "
+    "isolated on solid plain white background, no text, no shadow, no ground"
+)
+
+BESTIOLES = [
+    ("chat", "a flat black silhouette of a cat walking in side profile, "
+             "facing right, all four legs visible and clearly apart in mid-stride, "
+             "tail raised and curved, ears up, simple pictogram shape"),
+    ("chauvesouris", "a flat black silhouette of a bat seen from the front with "
+                     "both wings fully spread wide and symmetric, small body in "
+                     "the middle, ears up, simple pictogram shape"),
 ]
 
 MUSIQUES = [
@@ -169,10 +316,27 @@ def generer_sprites(studio, exporter, limite=None, dry=False):
     return faits, echecs
 
 
-def generer_decors(studio, exporter, limite=None, dry=False):
-    """Décors de pièce. Pas de détourage : un fond n'a pas à être découpé."""
+ITEMS_UNITY = PROJET_UNITY / "Assets" / "Resources" / "Items"
+
+
+def deja_produit(nom: str) -> bool:
+    """Le décor est-il déjà dans le projet Unity ?"""
+    return (ITEMS_UNITY / f"decor-{nom}.png").exists()
+
+
+def generer_decors(studio, exporter, limite=None, dry=False, nouveaux=False):
+    """Décors de pièce. Pas de détourage : un fond n'a pas à être découpé.
+
+    `nouveaux` saute ceux déjà présents dans le projet. C'est le mode normal
+    quand on complète un lot : `--limit` prend les N PREMIERS, donc toujours
+    les mêmes, et régénérer une image validée la remplace par un autre tirage.
+    """
     faits, echecs = [], []
-    lot = DECORS[:limite] if limite else DECORS
+    lot = [d for d in DECORS if not deja_produit(d[0])] if nouveaux else list(DECORS)
+    ignores = len(DECORS) - len(lot)
+    if ignores:
+        print(f"\n  {ignores} décors déjà produits, ignorés.")
+    lot = lot[:limite] if limite else lot
 
     for i, (nom, description) in enumerate(lot, 1):
         print(f"\n[{i}/{len(lot)}] decor {nom}")
@@ -225,6 +389,58 @@ def recadrer_decor(png: Path) -> Path:
     return png
 
 
+def recadrer_fond(png: Path) -> Path:
+    """Ne garde que la colonne centrale haute : le seul ciel sûr.
+
+    Deux tirages ont posé un horizon, des montagnes puis des sapins, malgré
+    « no horizon », « no landscape » et un cadrage zénithal. `CLAUDE.md` tranche
+    ce cas : quand SDXL résiste, c'est le contenu qui cède, pas le prompt.
+
+    Le sol arrive toujours par le bas, et les arbres par les bords — le haut du
+    centre est la région qu'aucun des deux tirages n'a salie. 54 % et non 60 :
+    à 60 %, la cime d'un sapin dépassait encore dans le coin bas-gauche. Le découpage est
+    donc exprimé en fractions et non en pixels : il vaut pour le prochain
+    tirage comme pour celui-ci.
+    """
+    from PIL import Image
+
+    im = Image.open(png).convert("RGB")
+    g, d = int(im.width * 0.24), int(im.width * 0.78)
+    b = int(im.height * 0.54)
+    im.crop((g, 0, d, b)).save(png)
+    return png
+
+
+def generer_fonds(studio, exporter, limite=None, dry=False, nouveaux=False):
+    """Fonds d'écran. Pas de détourage : un ciel n'a rien à découper."""
+    faits, echecs = [], []
+    lot = ([f for f in FONDS if not (ITEMS_UNITY / f"fond-{f[0]}.png").exists()]
+           if nouveaux else list(FONDS))
+    lot = lot[:limite] if limite else lot
+
+    for i, (nom, description) in enumerate(lot, 1):
+        print(f"\n[{i}/{len(lot)}] fond {nom}")
+        if dry:
+            continue
+
+        t0 = time.time()
+        try:
+            chemins = studio.sprite(description, name=f"fond-{nom}",
+                                    style=FOND_STYLE, variants=1, transparent=False)
+        except Exception as e:  # noqa: BLE001
+            print(f"    ECHEC : {e}")
+            echecs.append(nom)
+            continue
+
+        src = recadrer_fond(Path(chemins[0] if isinstance(chemins, (list, tuple))
+                                 else chemins))
+        dest = exporter.export(src, "sprite", f"fond-{nom}")
+        print(f"    OK en {time.time() - t0:.0f}s -> {dest.name}")
+        faits.append(dest)
+
+    return faits, echecs
+
+
 def generer_musiques(router, exporter, limite=None, dry=False):
     from studio.core import Modality
 
@@ -254,9 +470,11 @@ def generer_musiques(router, exporter, limite=None, dry=False):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--only", choices=["sprites", "decors", "music"])
+    ap.add_argument("--only", choices=["sprites", "decors", "fonds", "music"])
     ap.add_argument("--limit", type=int, help="ne traiter que les N premiers")
     ap.add_argument("--dry-run", action="store_true", help="affiche le plan sans générer")
+    ap.add_argument("--nouveaux", action="store_true",
+                    help="décors : ne produire que ceux absents du projet Unity")
     args = ap.parse_args()
 
     if not PROJET_UNITY.exists():
@@ -285,7 +503,13 @@ def main() -> int:
 
     if args.only in (None, "decors"):
         studio = game_studio(str(RACINE / "outputs" / "heritage"))
-        resultats["décors"] = generer_decors(studio, exporter, args.limit, args.dry_run)
+        resultats["décors"] = generer_decors(studio, exporter, args.limit,
+                                             args.dry_run, args.nouveaux)
+
+    if args.only in (None, "fonds"):
+        studio = game_studio(str(RACINE / "outputs" / "heritage"))
+        resultats["fonds"] = generer_fonds(studio, exporter, args.limit,
+                                           args.dry_run, args.nouveaux)
 
     if args.only in (None, "music"):
         resultats["musiques"] = generer_musiques(get_router(), exporter, args.limit, args.dry_run)
