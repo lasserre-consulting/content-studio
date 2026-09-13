@@ -108,9 +108,9 @@ tts:
 #      durée max        30 s                120 s
 #      reproductible    non                 oui (graine dans meta)
 #
-#  MusicGen et AudioGen restent en `fallback` : ils prennent le relais si
-#  stable-audio-tools n'est pas installé. Ne pas les retirer tant que
-#  l'étape C (retrait d'audiocraft) n'est pas faite.
+#  MusicGen et AudioGen ne sont plus en `fallback` (poids supprimés du cache).
+#  Leurs entrées `providers:` restent déclarées pour pouvoir les réactiver ;
+#  le code audiocraft sera retiré à l'étape C.
 #
 #  ⚠️ Le routeur ne bascule sur le fallback QUE si available() renvoie False,
 #  jamais sur une exception de generate(). Un `active` cassé casse l'audio.

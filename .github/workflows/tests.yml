@@ -1,0 +1,32 @@
+name: Tests
+
+# CI volontairement LÉGÈRE : les tests ne chargent aucun modèle (c'est une
+# règle du projet), donc un runner sans GPU les exécute entièrement avec le
+# seul cœur + numpy/soundfile (utilisés par les tests de verify/procedural).
+# Installer torch/audiocraft ici ne prouverait rien sur la génération réelle,
+# qui se valide sur le poste GPU via scripts/validate_stable_audio.py.
+# Vérifié en local dans un venv vierge avant d'être ajouté.
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Installer le cœur
+        run: python -m pip install -q -r requirements.txt -c constraints.txt pytest numpy soundfile
+      - name: Cohérence des fichiers de pinning
+        run: python scripts/dependency_compat_report.py --strict
+      - name: Tests
+        run: python -m pytest -q

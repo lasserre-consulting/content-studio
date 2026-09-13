@@ -27,6 +27,12 @@ plusieurs impasses résolues : il tient par des épingles, pas par chance.
 
 **Rollback :** `pip install -r requirements.lock.txt` puis `python -m studio.doctor`.
 
+Le lock est un `pip freeze --all` de l'environnement validé. Ne jamais le
+régénérer par une résolution (pip-tools & co.) : ça remplace l'état qui a marché
+par un état jamais testé, et pip ne sait pas hasher une dépendance git.
+`requirements-local.txt` n'est pas installable d'une traite (`--no-deps`
+obligatoire pour audiocraft et stable-audio-tools) : c'est une recette.
+
 ### Épingles Windows — Smart App Control bloque des DLL non signées
 
 Symptôme type : `ImportError: DLL load failed ... Une stratégie de contrôle
@@ -50,7 +56,8 @@ sur une version à réputation établie.
 .\.venv\Scripts\Activate.ps1
 
 python -m studio.doctor        # preflight : 12 vérifications. DOIT être vert.
-python -m pytest -q            # 155 tests, ~16 s, aucun modèle lourd chargé
+python -m pytest -q            # ~160 tests, ~16 s, aucun modèle lourd chargé
+python scripts/dependency_compat_report.py --strict   # cohérence constraints/lock/SHA
 
 python -m studio.cli providers
 python -m studio.cli image "chat astronaute, style pixar"

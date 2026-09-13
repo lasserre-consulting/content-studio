@@ -5,7 +5,9 @@ sans charger de modèle lourd. Le rapport est purement textuel, basé sur :
   - constraints.txt
   - requirements-local.txt
   - requirements.lock.txt
-  - requirements/profiles/*.txt
+
+Il complète `studio.doctor` (qui regarde ce qui est INSTALLÉ) : ici on vérifie
+que les fichiers de pinning sont cohérents entre eux, avant même d'installer.
 
 Usage :
     python scripts/dependency_compat_report.py
@@ -36,15 +38,6 @@ CRITICAL_PACKAGES = (
     "kiwisolver",
     "av",
 )
-
-REQUIRED_PROFILES = (
-    "core.txt",
-    "image-local.txt",
-    "audio-local.txt",
-    "tts-local.txt",
-    "full-local.txt",
-)
-
 
 @dataclass
 class Finding:
@@ -86,19 +79,6 @@ def read_specs(path: Path) -> dict[str, tuple[str, str]]:
         name, op, value = m.groups()
         specs[name.lower()] = (op, value.strip())
     return specs
-
-
-def check_profiles(root: Path) -> list[Finding]:
-    findings: list[Finding] = []
-    profiles_dir = root / "requirements" / "profiles"
-    if not profiles_dir.exists():
-        return [Finding("error", "profiles", "dossier requirements/profiles manquant")]
-    for filename in REQUIRED_PROFILES:
-        if not (profiles_dir / filename).exists():
-            findings.append(Finding("error", "profiles", f"profil manquant: {filename}"))
-    if not findings:
-        findings.append(Finding("info", "profiles", "profils d'installation par modalité présents"))
-    return findings
 
 
 def check_git_sha_pin(req_local: dict[str, tuple[str, str]], req_lock: dict[str, tuple[str, str]]) -> list[Finding]:
@@ -164,7 +144,6 @@ def build_report(root: Path) -> Report:
     else:
         findings.append(Finding("info", "lock", f"lock chargé ({len(req_lock)} paquets parsés)"))
 
-    findings.extend(check_profiles(root))
     findings.extend(check_git_sha_pin(req_local, req_lock))
     findings.extend(check_lock_alignment(constraints, req_lock))
     findings.extend(check_prerelease_markers(req_lock))

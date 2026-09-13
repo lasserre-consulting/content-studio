@@ -1,3 +1,0 @@
--r image-local.txt
--r audio-local.txt
--r tts-local.txt

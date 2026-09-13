@@ -38,19 +38,16 @@ Le reste du code ne change pas — le routeur la découvre seule.
 
 ```powershell
 python -m venv .venv ; .\.venv\Scripts\Activate.ps1
-pip install -r requirements/profiles/core.txt           # cœur + providers cloud (léger)
+pip install -r requirements.txt -c constraints.txt      # cœur + providers cloud (léger)
 
-# Profils locaux par modalité (réduit les collisions de dépendances) :
-pip install -r requirements/profiles/image-local.txt
-pip install -r requirements/profiles/audio-local.txt
-pip install -r requirements/profiles/tts-local.txt
+# Providers locaux GPU (lourd) — installe torch CUDA d'abord, depuis l'index
+# PyTorch (les roues `+cu124` n'existent PAS sur PyPI) :
+pip install torch==2.6.0 torchaudio==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
+# Puis suivre requirements-local.txt bloc par bloc : il n'est PAS installable
+# d'une traite (audiocraft et stable-audio-tools exigent --no-deps).
 
-# Stack locale complète (si nécessaire) :
-pip install -r requirements/profiles/full-local.txt
-
-copy .env.example .env                    # renseigne tes clés
+copy .env.example .env                    # renseigne tes clés (HF_TOKEN pour Stable Audio 3)
 python -m studio.doctor                   # vérifie la stack AVANT de générer
-python scripts/dependency_compat_report.py --strict
 ```
 
 > ⚠️ **ffmpeg requis** pour l'audio/vidéo : `winget install ffmpeg` (ou choco).
@@ -61,13 +58,13 @@ Cette stack fait cohabiter des paquets aux exigences contradictoires (audiocraft
 épingle torch 2.1, SDXL veut du torch récent). L'équilibre actuel est le fruit de
 plusieurs impasses résolues ; il tient par des épingles, pas par chance.
 
-**Trois niveaux, un lock unique :**
+**Trois fichiers, trois rôles :**
 
 | Fichier | Rôle |
 |---|---|
-| `requirements/profiles/*.txt` | profils d'installation par modalité (core / image / audio / tts / full) |
+| `requirements.txt` / `requirements-local.txt` | ce qu'on veut (intentions, bornes larges) |
 | `constraints.txt` | ce qu'on ne peut **pas** bouger, avec la raison de chaque épingle |
-| `requirements.lock.txt` | lock reproductible (source unique, à régénérer automatiquement) |
+| `requirements.lock.txt` | l'état complet connu-bon (`pip freeze --all`) — le filet de retour |
 
 **Règles :**
 
@@ -76,9 +73,11 @@ plusieurs impasses résolues ; il tient par des épingles, pas par chance.
 2. **Jamais** de `pip install -U` global. Les montées de version se font paquet
    par paquet, avec `python -m studio.doctor` + `pytest` après chacune.
 3. **Avant** toute montée risquée, vérifier que `requirements.lock.txt` est à
-   jour et commité via `python scripts/update_lock.py`.
-4. Les dépendances Git critiques (ex. stable-audio-tools) doivent être
-   épinglées par **SHA de commit**, jamais par branche/tag flottant.
+   jour (`pip freeze --all > requirements.lock.txt`) et commité. Le lock est un
+   *freeze* de l'environnement validé, jamais une résolution recalculée : c'est
+   ce qui garantit qu'il réinstalle exactement ce qui a marché.
+4. Les dépendances Git (stable-audio-tools) sont épinglées par **SHA de
+   commit**, jamais par branche flottante.
 
 **Retour arrière si la stack casse :**
 
@@ -88,31 +87,21 @@ python -m studio.doctor        # doit repasser au vert
 ```
 
 **Signal de santé :** `python -m studio.doctor` (12 vérifications : torch/CUDA/GPU,
-ABI xformers, DLL sklearn, ffmpeg+libvorbis, rembg…) et `pytest -q` (122 tests).
-Les deux doivent être verts avant de considérer un changement d'environnement
-comme réussi.
+ABI xformers, DLL sklearn, ffmpeg+libvorbis, rembg…) et `pytest -q` (~160 tests,
+aucun modèle chargé). Les deux doivent être verts avant de considérer un
+changement d'environnement comme réussi. Les tests ne prouvant pas que la
+génération marche, la validation réelle vit dans `scripts/` (ex.
+`validate_stable_audio.py`).
 
-**Rapport de compatibilité automatisé :**
+**Cohérence des fichiers de pinning** (sans rien installer) :
 
 ```powershell
-python scripts/dependency_compat_report.py --strict --format markdown --out dependency-report.md
+python scripts/dependency_compat_report.py --strict
 ```
 
-Le rapport vérifie l'alignement `constraints`/`lock`, l'épinglage SHA des dépendances
-Git et la présence des profils d'installation.
-
-### Politique de mise à jour (cadence mensuelle)
-
-1. Ouvrir une fenêtre dédiée (une fois par mois) pour monter **un paquet à la fois**.
-2. Après chaque montée : `python -m studio.doctor`, `pytest -q`, puis un smoke test réel.
-3. En cas d'écart : rollback immédiat sur `requirements.lock.txt`.
-4. Régénérer le lock via `python scripts/update_lock.py` et commiter dans la même PR.
-
-### Cache interne (wheelhouse) recommandé
-
-Pour stabiliser les builds CI et éviter les ruptures amont, conserver un wheelhouse
-des versions validées (artefacts CI ou miroir interne), puis installer depuis ce
-cache en priorité.
+Vérifie que `constraints.txt` et le lock s'accordent sur les paquets sensibles
+(torch, xformers, sklearn, kiwisolver, av…) et que stable-audio-tools est bien
+épinglé par SHA.
 
 ## Utilisation
 
@@ -170,8 +159,8 @@ print(r.llm("idée de SFX pour une potion"))
 |---|---|---|
 | Image | ✅ SDXL | Flux via fal.ai |
 | Voix / TTS | ✅ Kokoro (même sans GPU) | — |
-| Musique | ✅ MusicGen | — |
-| SFX | ✅ AudioGen | — |
+| Musique | ✅ Stable Audio 3 small (44,1 kHz stéréo, 120 s max) | — |
+| SFX | ✅ Stable Audio 3 small-sfx (tourne aussi sur CPU) | — |
 | Vidéo | 🔴 trop lourd | ✅ Kling/Veo via fal.ai |
 | Texte / LLM | ✅ Ollama | Anthropic / OpenAI |
 

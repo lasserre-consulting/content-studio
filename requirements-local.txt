@@ -1,11 +1,16 @@
 # Dépendances des providers LOCAUX (GPU). Lourd : ~5-8 Go de téléchargement.
 #
+# ⚠️ CE FICHIER N'EST PAS INSTALLABLE D'UNE TRAITE (`pip install -r`) : deux
+# paquets (audiocraft, stable-audio-tools) exigent --no-deps parce qu'ils
+# épinglent un torch différent. Il se lit comme une RECETTE, bloc par bloc,
+# dans l'ordre. La ligne `stable-audio-tools @ git+...@SHA` en bas est la
+# source de vérité du commit validé (vérifiée par dependency_compat_report.py).
+#
 # IMPORTANT (RTX 2080 SUPER / CUDA) : installe torch AVANT le reste, avec la
 # bonne roue CUDA, sinon pip prend la version CPU. Roue validée (cu124) :
-#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124
+#   pip install torch==2.6.0 torchaudio==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
 #
-# Puis :
-#   pip install -r requirements-local.txt
+# Puis les blocs ci-dessous, toujours avec `-c constraints.txt`.
 
 torch>=2.2              # (préinstaller via l'index CUDA, cf. ci-dessus)
 torchaudio
@@ -61,7 +66,7 @@ onnxruntime           # backend CPU ; onnxruntime-gpu pour accélérer si voulu
 #     (cf. studio/providers/stable_audio_base.py) — ne PAS patcher site-packages.
 #
 #  Procédure :
-#     pip install "git+https://github.com/Stability-AI/stable-audio-tools.git" \
+#     pip install "git+https://github.com/Stability-AI/stable-audio-tools.git@3241adba4fc2a85cf5b29d9eb68d42f40a28e820" \
 #         --no-deps --ignore-requires-python -c constraints.txt
 #     pip install k-diffusion x-transformers local-attention vector-quantize-pytorch \
 #         alias-free-torch ema-pytorch descript-audio-codec \
