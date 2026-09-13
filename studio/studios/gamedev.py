@@ -56,7 +56,8 @@ class GamedevStudio(Studio):
 
     # -- assets unitaires ------------------------------------------------------
     def sprite(self, prompt: str, *, name: str, style: str = SPRITE_STYLE,
-               variants: int = 1, seed: int = 2000, transparent: bool = True) -> list[Path]:
+               variants: int = 1, seed: int = 2000, transparent: bool = True,
+               **kw) -> list[Path]:
         """Génère un (ou plusieurs) sprite(s), détouré(s) à fond transparent.
 
         Le style par défaut force un fond uni (plus facile à détourer). Avec
@@ -65,7 +66,10 @@ class GamedevStudio(Studio):
         Godot — sans étape manuelle. Si rembg est absent, on garde l'image brute
         et on le signale dans les logs (jamais bloquant)."""
         full = f"{prompt}, {style}" if style else prompt
-        results = self.variations(Modality.IMAGE, full, n=variants, base_seed=seed)
+        # **kw file jusqu'au provider : c'est ainsi qu'on demande une autre
+        # taille (width/height) sans dupliquer la methode. Une carte de jeu
+        # est en portrait, pas en carre.
+        results = self.variations(Modality.IMAGE, full, n=variants, base_seed=seed, **kw)
         paths = self._collect(results, name, "sprite")
         if transparent and paths:
             paths = [self._cutout(p) for p in paths]
