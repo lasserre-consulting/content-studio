@@ -79,7 +79,7 @@ onnxruntime           # backend CPU ; onnxruntime-gpu pour accélérer si voulu
 #
 #  flash_attn absent = normal sous Windows : le code se rabat proprement dessus.
 # ============================================================================
-stable-audio-tools>=0.0.20   # DEPUIS GIT — voir procédure ci-dessus
+stable-audio-tools @ git+https://github.com/Stability-AI/stable-audio-tools.git@3241adba4fc2a85cf5b29d9eb68d42f40a28e820
 einops-exts
 prefigure
 auraloss

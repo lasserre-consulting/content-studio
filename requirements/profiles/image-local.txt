@@ -1,0 +1,14 @@
+-r core.txt
+
+# Socle GPU image (SDXL)
+torch==2.6.0+cu124
+torchaudio==2.6.0+cu124
+torchvision==0.21.0+cu124
+diffusers==0.38.0
+transformers==5.9.0
+accelerate==1.13.0
+safetensors==0.8.0rc1
+
+# Assemblage image
+rembg==2.0.76
+onnxruntime==1.26.0

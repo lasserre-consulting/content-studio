@@ -1,0 +1,5 @@
+-r core.txt
+
+# Voix (tourne aussi sur CPU)
+kokoro==0.9.4
+soundfile==0.13.1
